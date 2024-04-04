@@ -41,7 +41,7 @@ const HeaderSection = () => {
 
 const PastAppointments = () => {
     return (
-        <section style={{marginTop: "4rem", marginBottom: "4rem"}}>
+        <section style={{marginTop: "4rem", marginBottom: "4rem", padding: "2rem"}}>
             <h1>Past Appointments</h1>
             <Table striped bordered hover responsive="sm">
                 <thead>
@@ -96,7 +96,7 @@ const PastAppointments = () => {
 
 const UpcomingAppointments = () => {
     return (
-        <section style={{marginTop: "4rem", marginBottom: "4rem"}}>
+        <section style={{marginTop: "4rem", marginBottom: "4rem", padding: "2rem"}}>
             <h1>Upcoming Appointments</h1>
             <Table striped bordered hover responsive="sm">
                 <thead>
