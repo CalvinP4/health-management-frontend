@@ -48,55 +48,6 @@ const DoctorSchedule: React.FC<DoctorScheduleProps> = ({ doctorSchedule }) => {
   );
 };
 
-const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
-  return (
-    <div>
-      <h2>Patient's Appointments</h2>
-      <ul className="list-group">
-        {appointments.map((appointment, index) => (
-          <li key={index} className="list-group-item">
-            {appointment.doctorName} - {appointment.patientName} - {appointment.dateTime}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorName: initialDoctorName }) => {
-  const [doctorName, setDoctorName] = useState(initialDoctorName);
-  const [patientName, setPatientName] = useState('');
-  const [dateTime, setDateTime] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ doctorName, patientName, dateTime });
-    setPatientName('');
-    setDateTime('');
-  };
-
-  return (
-    <div style={{ maxWidth: '600px', marginTop: '40px', width: '110%', padding: '20px', borderRadius: '5px', background: 'rgba(255,255,255,0.8)', textAlign: 'left' }}>
-      <h2>Schedule Appointment</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Doctor Name:</label>
-          <input type="text" className="form-control" value={doctorName} onChange={(e) => setDoctorName(e.target.value)} />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Patient Name:</label>
-          <input type="text" className="form-control" value={patientName} onChange={(e) => setPatientName(e.target.value)} />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Date & Time:</label>
-          <input type="datetime-local" className="form-control" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
-        </div>
-        <button type="submit" className="btn btn-primary">Schedule</button>
-      </form>
-    </div>
-  );
-};
-
 const DoctorScheduleForm: React.FC<DoctorScheduleFormProps> = ({ onSubmit, doctorName }) => {
   const [schedule, setSchedule] = useState<ScheduleItem[]>([{ day: '', startTime: '', endTime: '' }]);
   const [doctorNameInput, setDoctorNameInput] = useState<string>(doctorName);
@@ -128,9 +79,9 @@ const DoctorScheduleForm: React.FC<DoctorScheduleFormProps> = ({ onSubmit, docto
         {schedule.map((item, index) => (
           <div key={index}>
             <div className="mb-3">
-              <label className="form-label">Day:</label>
+              <label className="form-label">Date:</label>
               <input
-                type="text"
+                type="date"
                 className="form-control"
                 value={item.day}
                 onChange={(e) => handleScheduleChange(index, 'day', e.target.value)}
@@ -258,10 +209,6 @@ function AppointmentScheduler() {
         <div className="col">
           <DoctorSchedule doctorSchedule={doctorSchedule} />
           <DoctorScheduleForm onSubmit={updateDoctorSchedule} doctorName={doctorName} />
-        </div>
-        <div className="col">
-          <Appointments appointments={appointments} />
-          <AppointmentForm onSubmit={scheduleAppointment} doctorName={doctorName} />
         </div>
       </div>
       <div style={{ marginTop: 'auto', fontWeight: 'bold', marginBottom: '0px', textAlign: 'center', fontSize: '12px', color: '#666' }}>

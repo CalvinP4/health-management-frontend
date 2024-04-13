@@ -33,20 +33,6 @@ interface DoctorScheduleFormProps {
   doctorName: string;
 }
 
-const DoctorSchedule: React.FC<DoctorScheduleProps> = ({ doctorSchedule }) => {
-  return (
-    <div>
-      <h2>Doctor's Schedule</h2>
-      <ul className="list-group">
-        {doctorSchedule.map((scheduleItem, index) => (
-          <li key={index} className="list-group-item">
-            {scheduleItem.day}: {scheduleItem.startTime} - {scheduleItem.endTime}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
   return (
@@ -92,72 +78,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorName:
           <input type="datetime-local" className="form-control" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
         </div>
         <button type="submit" className="btn btn-primary">Schedule</button>
-      </form>
-    </div>
-  );
-};
-
-const DoctorScheduleForm: React.FC<DoctorScheduleFormProps> = ({ onSubmit, doctorName }) => {
-  const [schedule, setSchedule] = useState<ScheduleItem[]>([{ day: '', startTime: '', endTime: '' }]);
-  const [doctorNameInput, setDoctorNameInput] = useState<string>(doctorName);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(schedule);
-    setSchedule([{ day: '', startTime: '', endTime: '' }]);
-  };
-
-  const handleAddScheduleItem = () => {
-    setSchedule([...schedule, { day: '', startTime: '', endTime: '' }]);
-  };
-
-  const handleScheduleChange = (index: number, field: keyof ScheduleItem, value: string) => {
-    const updatedSchedule = [...schedule];
-    updatedSchedule[index][field] = value;
-    setSchedule(updatedSchedule);
-  };
-
-  return (
-    <div style={{ maxWidth: '400px', marginTop: '40px', width: '150%', padding: '20px', borderRadius: '5px', background: 'rgba(255,255,255,0.8)', textAlign: 'left' }}>
-      <h2>Add / Update Schedule</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Doctor Name:</label>
-          <input type="text" className="form-control" value={doctorNameInput} onChange={(e) => setDoctorNameInput(e.target.value)} />
-        </div>
-        {schedule.map((item, index) => (
-          <div key={index}>
-            <div className="mb-3">
-              <label className="form-label">Day:</label>
-              <input
-                type="text"
-                className="form-control"
-                value={item.day}
-                onChange={(e) => handleScheduleChange(index, 'day', e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Start Time:</label>
-              <input
-                type="time"
-                className="form-control"
-                value={item.startTime}
-                onChange={(e) => handleScheduleChange(index, 'startTime', e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">End Time:</label>
-              <input
-                type="time"
-                className="form-control"
-                value={item.endTime}
-                onChange={(e) => handleScheduleChange(index, 'endTime', e.target.value)}
-              />
-            </div>
-          </div>
-        ))}
-        <button type="submit" className="btn btn-primary">Update Schedule</button>
-        <button type="button" className="btn btn-secondary" onClick={handleAddScheduleItem}>Add Schedule</button>
       </form>
     </div>
   );
@@ -255,10 +175,6 @@ function AppointmentScheduler() {
         minHeight: 'calc(100vh - 0.5in)', // Adjusting height to start from 0.5 inch below the top
     }}>
       <div className="row">
-        <div className="col">
-          <DoctorSchedule doctorSchedule={doctorSchedule} />
-          <DoctorScheduleForm onSubmit={updateDoctorSchedule} doctorName={doctorName} />
-        </div>
         <div className="col">
           <Appointments appointments={appointments} />
           <AppointmentForm onSubmit={scheduleAppointment} doctorName={doctorName} />
