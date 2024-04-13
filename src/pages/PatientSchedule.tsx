@@ -15,24 +15,14 @@ interface Appointment {
   dateTime: string;
 }
 
-interface DoctorScheduleProps {
-  doctorSchedule: ScheduleItem[];
-}
-
 interface AppointmentsProps {
   appointments: Appointment[];
 }
 
 interface AppointmentFormProps {
   onSubmit: (appointmentDetails: Appointment) => void;
-  doctorName: string;
+  doctorNames: string[];
 }
-
-interface DoctorScheduleFormProps {
-  onSubmit: (updatedSchedule: ScheduleItem[]) => void;
-  doctorName: string;
-}
-
 
 const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
   return (
@@ -49,8 +39,8 @@ const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
   );
 };
 
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorName: initialDoctorName }) => {
-  const [doctorName, setDoctorName] = useState(initialDoctorName);
+const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorNames }) => {
+  const [doctorName, setDoctorName] = useState('');
   const [patientName, setPatientName] = useState('');
   const [dateTime, setDateTime] = useState('');
 
@@ -67,7 +57,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorName:
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Doctor Name:</label>
-          <input type="text" className="form-control" value={doctorName} onChange={(e) => setDoctorName(e.target.value)} />
+          <select className="form-select" value={doctorName} onChange={(e) => setDoctorName(e.target.value)}>
+            <option value="">Select Doctor</option>
+            {doctorNames.map((name, index) => (
+              <option key={index} value={name}>{name}</option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label className="form-label">Patient Name:</label>
@@ -85,24 +80,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ onSubmit, doctorName:
 
 function AppointmentScheduler() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [doctorSchedule, setDoctorSchedule] = useState<ScheduleItem[]>([]);
-  const [doctorName, setDoctorName] = useState('');
+  const [doctorNames, setDoctorNames] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchDoctorSchedule();
     fetchAppointments();
-    fetchDoctorName(); // Fetch doctor's name
+    fetchDoctorNames();
   }, []);
-
-  const fetchDoctorSchedule = async () => {
-    try {
-      const response = await fetch('api/doctors/schedule');
-      const data = await response.json();
-      setDoctorSchedule(data);
-    } catch (error) {
-      console.error('Error fetching doctor schedule: ', error);
-    }
-  };
 
   const fetchAppointments = async () => {
     try {
@@ -114,13 +97,13 @@ function AppointmentScheduler() {
     }
   };
 
-  const fetchDoctorName = async () => {
+  const fetchDoctorNames = async () => {
     try {
-      const response = await fetch('api/doctors/name');
+      const response = await fetch('api/doctors/names');
       const data = await response.json();
-      setDoctorName(data.name);
+      setDoctorNames(data);
     } catch (error) {
-      console.error('Error fetching doctor name: ', error);
+      console.error('Error fetching doctor names: ', error);
     }
   };
 
@@ -136,29 +119,10 @@ function AppointmentScheduler() {
       if (!response.ok) {
         throw new Error('Failed to schedule appointment');
       }
-      // Assuming the server responds with the newly created appointment
       const newAppointment = await response.json();
       setAppointments([...appointments, newAppointment]);
     } catch (error) {
       console.error('Error scheduling appointment: ', error);
-    }
-  };
-
-  const updateDoctorSchedule = async (updatedSchedule: ScheduleItem[]) => {
-    try {
-      const response = await fetch('api/doctors/schedule', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedSchedule)
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update doctor schedule');
-      }
-      setDoctorSchedule(updatedSchedule);
-    } catch (error) {
-      console.error('Error updating doctor schedule: ', error);
     }
   };
 
@@ -172,12 +136,12 @@ function AppointmentScheduler() {
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: '0.5in',
-        minHeight: 'calc(100vh - 0.5in)', // Adjusting height to start from 0.5 inch below the top
+        minHeight: 'calc(100vh - 0.5in)',
     }}>
       <div className="row">
         <div className="col">
           <Appointments appointments={appointments} />
-          <AppointmentForm onSubmit={scheduleAppointment} doctorName={doctorName} />
+          <AppointmentForm onSubmit={scheduleAppointment} doctorNames={doctorNames} />
         </div>
       </div>
       <div style={{ marginTop: 'auto', fontWeight: 'bold', marginBottom: '0px', textAlign: 'center', fontSize: '12px', color: '#666' }}>
