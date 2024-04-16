@@ -7,6 +7,10 @@ import history from '../assets/history.svg';
 import medicine from '../assets/medicine.svg';
 import Footer from '../components/Footer';
 
+import wallpaper1 from '../assets/wallpaper-1.jpg';
+import wallpaper2 from '../assets/wallpaper-2.jpeg';
+import wallpaper3 from '../assets/wallpaper-3.jpg';
+
 
 const HeaderSection = () => {
     return (
@@ -50,7 +54,7 @@ const CarouselSection = () => {
                 <Carousel.Item>
                     <img
                         className="d-block w-100"
-                        src="https://via.placeholder.com/800x400"
+                        src={wallpaper1}
                         alt="First slide"
                     />
                     <Carousel.Caption>
@@ -61,7 +65,7 @@ const CarouselSection = () => {
                 <Carousel.Item>
                     <img
                         className="d-block w-100"
-                        src="https://via.placeholder.com/800x400"
+                        src={wallpaper2}
                         alt="Second slide"
                     />
 
@@ -73,7 +77,7 @@ const CarouselSection = () => {
                 <Carousel.Item>
                     <img
                         className="d-block w-100"
-                        src="https://via.placeholder.com/800x400"
+                        src={wallpaper3}
                         alt="Third slide"
                     />
                     <Carousel.Caption>
