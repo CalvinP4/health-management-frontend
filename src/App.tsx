@@ -4,10 +4,11 @@ import Home from './pages/Home';
 import Staff from './pages/Staff';
 import Patient from './pages/Patient';
 import Doctor from './pages/Doctor';
-import Register from './pages/register';  
+import Register from './pages/Register';  
 import Appointments from './pages/Appointments'; 
 import DoctorSchedule from './pages/DoctorSchedule';
 import PatientSchedule from './pages/PatientSchedule';
+import Prescription from './pages/Prescription';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/appointments" element={<Appointments />} />
       <Route path="/DoctorSchedule" element={<DoctorSchedule />} />
       <Route path="/PatientSchedule" element={<PatientSchedule />} />
+      <Route path="/Prescription" element={<Prescription />} />
       <Route path="*" element={<Home />} />
     </Routes>
   );
