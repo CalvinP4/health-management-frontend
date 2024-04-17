@@ -113,7 +113,6 @@ const SuggestionsCard = () => {
         <Card className="shadow">
             <Card.Header>Suggestions</Card.Header>
             <Card.Body>
-
                 <Card.Text>
                     <p>Medication: Paracetamol</p>
                     <p>Dosage: 500mg</p>
@@ -125,7 +124,6 @@ const SuggestionsCard = () => {
                     <Button variant="secondary">Decline</Button>
                 </div>
             </Card.Body>
-
         </Card>
     );
 
