@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { Doctor } from "../types/Doctors";
 import doctorSvg from "../assets/doctor.svg";
 import hospitalSvg from "../assets/hospital.png";
-import doctorBackground from "../assets/doctorBackground.png"; 
+import doctorBackground from "../assets/healthcare.jpeg"; 
 
 const localizer = momentLocalizer(moment);
 const doctorId = "802edd67-34eb-439f-bcd6-ccbaf133b163";
