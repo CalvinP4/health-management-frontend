@@ -13,9 +13,11 @@ const Register = () => {
     dateOfBirth: "",
     phone: "",
     password: "",
+    speciality: "", // Add speciality field for doctors
+    location: "", // Add location field for doctors
   });
 
-  const handleRegisterChange = (e: any) => {
+  const handleRegisterChange = (e:any) => {
     const { name, value } = e.target;
     setRegisterForm((prevState) => ({
       ...prevState,
@@ -31,7 +33,7 @@ const Register = () => {
     // Make API call
     try {
       console.log(JSON.stringify(registerForm));
-      const response = await fetch(`http://localhost:3000/patients`, {
+      const response = await fetch(`http://localhost:3000/${registerForm.userType}s`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,14 +44,206 @@ const Register = () => {
       const data = await response.json();
       console.log(data);
 
-      // Navigate to patient page after successful registration
+      // Navigate to user page after successful registration
       if (data.id) {
-        navigate("/patient");
+        navigate(`/${registerForm.userType}`);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  const renderPatientForm = () => (
+    <>
+      <label htmlFor="firstName" style={{ display: "block" }}>
+        First Name:
+      </label>
+      <input
+        type="text"
+        id="firstName"
+        name="firstName"
+        value={registerForm.firstName}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="lastName" style={{ display: "block" }}>
+        Last Name:
+      </label>
+      <input
+        type="text"
+        id="lastName"
+        name="lastName"
+        value={registerForm.lastName}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="gender" style={{ display: "block" }}>
+        Gender:
+      </label>
+      <select
+        id="gender"
+        name="gender"
+        value={registerForm.gender}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      >
+        <option value="">Select...</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+      <label htmlFor="email" style={{ display: "block" }}>
+        Email:
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={registerForm.email}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="dateOfBirth" style={{ display: "block" }}>
+        Date of Birth:
+      </label>
+      <input
+        type="date"
+        id="dateOfBirth"
+        name="dateOfBirth"
+        value={registerForm.dateOfBirth}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="phone" style={{ display: "block" }}>
+        Phone:
+      </label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        value={registerForm.phone}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="password" style={{ display: "block" }}>
+        Password:
+      </label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        value={registerForm.password}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+    </>
+  );
+
+  const renderDoctorForm = () => (
+    <>
+      <label htmlFor="firstName" style={{ display: "block" }}>
+        First Name:
+      </label>
+      <input
+        type="text"
+        id="firstName"
+        name="firstName"
+        value={registerForm.firstName}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="lastName" style={{ display: "block" }}>
+        Last Name:
+      </label>
+      <input
+        type="text"
+        id="lastName"
+        name="lastName"
+        value={registerForm.lastName}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="email" style={{ display: "block" }}>
+        Email:
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={registerForm.email}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="speciality" style={{ display: "block" }}>
+        Speciality:
+      </label>
+      <select
+        id="speciality"
+        name="speciality"
+        value={registerForm.speciality}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      >
+        <option value="">Select...</option>
+        <option value="Pediatrics">Pediatrics</option>
+        <option value="Ortho">Ortho</option>
+        <option value="Family Medicine">Family Medicine</option>
+        <option value="Cardiology">Cardiology</option>
+        <option value="Endocrine">Endocrine</option>
+      </select>
+      <label htmlFor="location" style={{ display: "block" }}>
+        Location:
+      </label>
+      <select
+        id="location"
+        name="location"
+        value={registerForm.location}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      >
+        <option value="">Select...</option>
+        <option value="Kaiser San Jose">Kaiser San Jose</option>
+        <option value="Kaiser Santa Clara">Kaiser Santa Clara</option>
+        <option value="Kaiser Fremont">Kaiser Fremont</option>
+      </select>
+      <label htmlFor="phone" style={{ display: "block" }}>
+        Phone:
+      </label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        value={registerForm.phone}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+      <label htmlFor="password" style={{ display: "block" }}>
+        Password:
+      </label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        value={registerForm.password}
+        onChange={handleRegisterChange}
+        required
+        style={{ width: "100%" }}
+      />
+    </>
+  );
 
   return (
     <div
@@ -98,99 +292,13 @@ const Register = () => {
             onChange={handleRegisterChange}
             required
           >
-            <option value=" ">Select User Type</option>
+            <option value="">Select User Type</option>
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
           </select>
           <h3>Register</h3>
-          <label htmlFor="firstName" style={{ display: "block" }}>
-            First Name:
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={registerForm.firstName}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
-          <label htmlFor="lastName" style={{ display: "block" }}>
-            Last Name:
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={registerForm.lastName}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
-          <label htmlFor="gender" style={{ display: "block" }}>
-            Gender:
-          </label>
-          <select
-            id="gender"
-            name="gender"
-            value={registerForm.gender}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          >
-            <option value="">Select...</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-          <label htmlFor="email" style={{ display: "block" }}>
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={registerForm.email}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
-          <label htmlFor="dateOfBirth" style={{ display: "block" }}>
-            Date of Birth:
-          </label>
-          <input
-            type="date"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={registerForm.dateOfBirth}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
-          <label htmlFor="phone" style={{ display: "block" }}>
-            Phone:
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={registerForm.phone}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
-          <label htmlFor="password" style={{ display: "block" }}>
-            Password:
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={registerForm.password}
-            onChange={handleRegisterChange}
-            required
-            style={{ width: "100%" }}
-          />
+          {registerForm.userType === "patient" && renderPatientForm()}
+          {registerForm.userType === "doctor" && renderDoctorForm()}
           <input
             type="submit"
             value="Register"

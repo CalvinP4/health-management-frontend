@@ -22,6 +22,7 @@ import wallpaper2 from "../assets/wallpaper-2.jpeg";
 import wallpaper3 from "../assets/wallpaper-3.jpg";
 import { Appointment } from "../types/Appointments";
 import { Doctor } from "../types/Doctors";
+import patientSvg from "../assets/patientCare.png";
 
 // TODO: Needs to be fetched dynamically after logging in
 const patientId = "bfe6db61-940e-4b86-9cc5-8870da49f033";
@@ -31,33 +32,20 @@ const HeaderSection = () => {
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand>Patient</Navbar.Brand>
+          <Navbar.Brand>Patient Home</Navbar.Brand>
+          <img
+              src={patientSvg}
+              alt="patient"
+              style={{ marginLeft: "0px", height: "60px", width: "1" }}
+            />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
+            {/* <Nav className="mr-auto">
               <Nav.Link href="#home">Home</Nav.Link>
-            </Nav>
+            </Nav> */}
             <Nav className="ms-auto">
-              <NavDropdown title="Appointments" id="appointment-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Past Appointments
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Book Appointment
-                </NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Pharmacy" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Past Purchases
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Store</NavDropdown.Item>
-              </NavDropdown>
               <Button variant="outline-primary" style={styles.profileButton}>
-                <img
-                  src={profileLogo}
-                  alt="Profile"
-                  style={styles.profileImage}
-                />
+              <div style={styles.profileImage}>P</div>
               </Button>
             </Nav>
           </Navbar.Collapse>
@@ -235,6 +223,14 @@ const styles = {
   profileImage: {
     width: "100%",
     height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "24px",
+    fontWeight: "bold",
+    backgroundColor: "#007bff",
+    color: "white",
+    borderRadius: "50%",
   },
   buttonGrid: {
     display: "flex",

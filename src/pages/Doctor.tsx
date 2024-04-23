@@ -22,6 +22,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Doctor } from "../types/Doctors";
+import doctorSvg from "../assets/doctor.svg";
+import hospitalSvg from "../assets/hospital.png";
 
 const localizer = momentLocalizer(moment);
 const doctorId = "802edd67-34eb-439f-bcd6-ccbaf133b163";
@@ -31,35 +33,20 @@ const HeaderSection = () => {
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand>Doctor</Navbar.Brand>
+          <Navbar.Brand>Welcome Doctor</Navbar.Brand>
+          <img
+              src={hospitalSvg}
+              alt="Doctor"
+              style={{ marginLeft: "0px", height: "40px", width: "auto" }}
+            />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            {/* <Nav className="me-auto">
               <Nav.Link href="#home">Home</Nav.Link>
-            </Nav>
+            </Nav> */}
             <Nav className="ms-auto">
-              <NavDropdown title="Appointments" id="appointment-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Past Appointments
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Book Slot
-                </NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Pharmacy" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Appointment History
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Past Appointments
-                </NavDropdown.Item>
-              </NavDropdown>
               <Button variant="outline-primary" style={styles.profileButton}>
-                <img
-                  src={profileLogo}
-                  alt="Profile"
-                  style={styles.profileImage}
-                />
+              <div style={styles.profileImage}>D</div>
               </Button>
             </Nav>
           </Navbar.Collapse>
@@ -227,7 +214,7 @@ const DoctorProfile = (props: any) => {
   return (
     <section style={styles.profileSection}>
       <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={profileLogo} />
+        <Card.Img variant="top" src={doctorSvg} />
         <Card.Body>
           <Card.Title>Dr. John Doe</Card.Title>
           <Card.Text>
@@ -250,7 +237,6 @@ const DoctorProfile = (props: any) => {
           <Button variant="secondary" className="mb-3">
             Update Profile
           </Button>
-          <Button variant="secondary">Update Profile</Button>
         </Card.Body>
       </Card>
     </section>
@@ -301,7 +287,7 @@ const DoctorComponent = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{paddingLeft: "10rem", paddingRight: "10rem"}} >
       <HeaderSection />
       <DoctorProfile setShowCalendar={setShowCalendar} />
       <MyCalendar appointments={appointments} />
@@ -324,6 +310,14 @@ const styles = {
   profileImage: {
     width: "100%",
     height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "24px",
+    fontWeight: "bold",
+    backgroundColor: "#007bff",
+    color: "white",
+    borderRadius: "50%",
   },
   buttonGrid: {
     display: "flex",
