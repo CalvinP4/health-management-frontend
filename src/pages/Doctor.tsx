@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { Doctor } from "../types/Doctors";
 import doctorSvg from "../assets/doctor.svg";
 import hospitalSvg from "../assets/hospital.png";
+import doctorBackground from "../assets/doctorBackground.png"; 
 
 const localizer = momentLocalizer(moment);
 const doctorId = "802edd67-34eb-439f-bcd6-ccbaf133b163";
@@ -33,12 +34,12 @@ const HeaderSection = () => {
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand>Welcome Doctor</Navbar.Brand>
           <img
               src={hospitalSvg}
               alt="Doctor"
-              style={{ marginLeft: "0px", height: "40px", width: "auto" }}
+              style={{ marginLeft: "10px", height: "40px", width: "auto" }}
             />
+          <Navbar.Brand style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}> Hospital Management System</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             {/* <Nav className="me-auto">
@@ -212,34 +213,22 @@ const MyCalendar = (props: any) => {
 const DoctorProfile = (props: any) => {
   const navigate = useNavigate();
   return (
-    <section style={styles.profileSection}>
-      <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={doctorSvg} />
-        <Card.Body>
-          <Card.Title>Dr. John Doe</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
-        </Card.Body>
-      </Card>
-      <Card style={{ width: "18rem" }}>
-        <Card.Body>
-          <Card.Title>Actions</Card.Title>
-          <Button
-            variant="primary"
-            className="mb-3"
-            onClick={() => props?.setShowCalendar(true)}
-          >
-            Update Schedule
-          </Button>
-          <Button variant="secondary" className="mb-3">
-            Update Profile
-          </Button>
-        </Card.Body>
-      </Card>
-    </section>
+    <div style={{ ...styles.profileSection,  }}>
+      <p style={{ fontWeight: "bold", fontSize: "20px",width: "40%", height: "40%" }}>Welcome Dr. John Doe !</p>
+      <div>
+        <h3>Actions</h3>
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() => props?.setShowCalendar(true)}
+        >
+          Update Schedule
+        </Button>
+        <Button variant="secondary" className="mb-3">
+          Update Profile
+        </Button>
+      </div>
+    </div>
   );
 };
 
