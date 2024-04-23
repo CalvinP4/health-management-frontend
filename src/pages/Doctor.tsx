@@ -39,7 +39,7 @@ const HeaderSection = () => {
               alt="Doctor"
               style={{ marginLeft: "10px", height: "40px", width: "auto" }}
             />
-          <Navbar.Brand style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}> Hospital Management System</Navbar.Brand>
+          <Navbar.Brand style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}> MediTech HealthCare </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             {/* <Nav className="me-auto">
