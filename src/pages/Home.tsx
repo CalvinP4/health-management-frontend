@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Home = () => {
     const [loginForm, setLoginForm] = useState({
-        username: '',
+        email: '',
         password: ''
     });
 
@@ -37,8 +37,8 @@ const Home = () => {
             <div style={{ maxWidth: '400px', marginTop: '110px', width: '100%', padding: '20px', borderRadius: '5px', background: 'rgba(255,255,255,0.8)', textAlign: 'left' }}>
                 <form onSubmit={handleLoginSubmit}>
                     <h3 style={{fontWeight: 'bold'}}>Login</h3>
-                    <label htmlFor="username" style={{ display: 'block' }}>Username:</label>
-                    <input type="text" id="username" name="username" value={loginForm.username} onChange={handleLoginChange} required style={{ width: '100%' }} />
+                    <label htmlFor="email" style={{ display: 'block' }}>Email:</label>
+                    <input type="text" id="email" name="email" value={loginForm.email} onChange={handleLoginChange} required style={{ width: '100%' }} />
                     <label htmlFor="password" style={{ display: 'block' }}>Password:</label>
                     <input type="password" id="password" name="password" value={loginForm.password} onChange={handleLoginChange} required style={{ width: '100%' }} />
                     <input type="submit" value="Login" style={{ width: '100%', backgroundColor: '#4CAF50', color: 'white', padding: '14px 20px', margin: '8px 0', border: 'none', borderRadius: '4px', cursor: 'pointer' }} />

@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Staff from './pages/Staff';
 import Patient from './pages/Patient';
-import Doctor from './pages/Doctor';
+import DoctorComponent from './pages/Doctor';
 import Register from './pages/Register';  
 import Appointments from './pages/Appointments'; 
 import DoctorSchedule from './pages/DoctorSchedule';
@@ -16,7 +16,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/staff" element={<Staff />} />
       <Route path="/patient" element={<Patient />} />
-      <Route path="/doctor" element={<Doctor />} />
+      <Route path="/doctor" element={<DoctorComponent />} />
       <Route path="/register" element={<Register />} />
       <Route path="/appointments" element={<Appointments />} />
       <Route path="/doctor-schedule" element={<DoctorSchedule />} />

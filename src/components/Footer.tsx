@@ -12,15 +12,15 @@ const Footer = () => {
                     <Col md={3}>
                         <h5>Quick Links</h5>
                         <ul>
-                            <li><a href="#">Link 1</a></li>
-                            <li><a href="#">Link 2</a></li>
-                            <li><a href="#">Link 3</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Connect with us</a></li>
                         </ul>
                     </Col>
                     <Col md={3}>
                         <h5>Contact Us</h5>
                         <p>123 Main Street, Anytown, USA</p>
-                        <p>Email: info@example.com</p>
+                        <p>Email: info@meditech.com</p>
                         <p>Phone: (123) 456-7890</p>
                     </Col>
                     <Col md={3}>
@@ -32,7 +32,7 @@ const Footer = () => {
                 </Row>
                 <Row>
                     <Col className="text-center py-3">
-                        Copyright &copy; 2022 Your Company
+                        Copyright &copy; 2022 MediTech solutions
                     </Col>
                 </Row>
             </Container>
