@@ -62,24 +62,23 @@ const CarouselSection = () => {
         <Carousel.Item>
           <img className="d-block w-100" src={wallpaper1} alt="First slide" style={{height: '500px'}} />
           <Carousel.Caption>
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            <h3>Health is Wealth</h3>
+            <p></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
           <img className="d-block w-100" src={wallpaper2} alt="Second slide" style={{height: '500px'}} />
 
           <Carousel.Caption>
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <h3>Eating Healthy Cures</h3>
+            <p></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
           <img className="d-block w-100" src={wallpaper3} alt="Third slide" style={{height: '500px'}} />
           <Carousel.Caption>
-            <h3>Third slide label</h3>
+            <h3>We are here to Care</h3>
             <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
             </p>
           </Carousel.Caption>
         </Carousel.Item>
@@ -167,11 +166,10 @@ const QuoteSection = () => {
           <blockquote className="blockquote mb-0">
             <p>
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              posuere erat a ante.{" "}
+              "Let food be thy medicine and medicine be thy food."{" "}
             </p>
             <footer className="blockquote-footer">
-              Someone famous in <cite title="Source Title">Source Title</cite>
+            Hippocrates <cite title="Source Title"></cite>
             </footer>
           </blockquote>
         </Card.Body>
