@@ -6,4 +6,5 @@ export interface Patient {
     gender: string;
     email: string;
     phone: string;
+    vitals: [{key: string, value: string}];
 }
