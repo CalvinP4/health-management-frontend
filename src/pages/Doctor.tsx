@@ -129,7 +129,7 @@ const UpcomingAppointments = (props: any) => {
             <th>Age</th>
             <th>Appointment date</th>
             <th>Appointment time</th>
-            <th>Issue</th>
+            <th>Reason</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -162,7 +162,7 @@ const UpcomingAppointments = (props: any) => {
                       { hour: "2-digit", minute: "2-digit", hour12: true }
                     )}
                   </td>
-                  <td>TODO</td>
+                  <td>{appointment.reason}</td>
                   <td>
                     <Button
                       variant="success"
@@ -214,7 +214,7 @@ const DoctorProfile = (props: any) => {
   const navigate = useNavigate();
   return (
     <div style={{ ...styles.profileSection,  }}>
-      <p style={{ fontWeight: "bold", fontSize: "20px",width: "40%", height: "40%" }}>Welcome Dr. John Doe !</p>
+      <p style={{ fontWeight: "bold", fontSize: "20px",width: "40%", height: "40%" }}>Welcome Dr. James H!</p>
       <div>
         <h3>Actions</h3>
         <Button

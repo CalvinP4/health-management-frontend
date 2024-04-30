@@ -4,6 +4,8 @@ export interface Appointment {
   patientId: string;
   fees: number;
   scheduledAt: Date;
+  reason: string;
+  location: string;
   duration: number;
   status: string;
   cancelledAt: Date;

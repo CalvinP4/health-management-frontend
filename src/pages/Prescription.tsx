@@ -63,7 +63,12 @@ const PatientDetailSection = (props: any) => {
           <PatientCard patient={props.patient} />
         </Col>
         <Col sm={6}>
-          <AppointmentCard appointment={props.appointment} />
+          <Row>
+            <AppointmentCard appointment={props.appointment} />
+          </Row>
+          <Row>
+            <SearchCard />
+          </Row>
         </Col>
       </Row>
     </section>
@@ -87,6 +92,15 @@ const PatientCard = (props: any) => {
               new Date(patient?.dateOfBirth ?? "").getFullYear()}
           </p>
           <p>ID: {patient.id}</p>
+          <hr />
+          <h6>Vitals</h6>
+          {patient.vitals.map((v: { key: string; value: string }) => {
+            return (
+              <p>
+                {v.key} : {v.value}
+              </p>
+            );
+          })}
         </Card.Text>
       </Card.Body>
     </Card>
@@ -101,39 +115,48 @@ const AppointmentCard = (props: any) => {
     <Card className="shadow">
       <Card.Header>Appointment</Card.Header>
       <Card.Body>
-        <Card.Title>Appointment Details</Card.Title>
         <Card.Text>
           <p>
-            Date:{" "}
+            Date & Time:{" "}
             {new Date(appointment.scheduledAt).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "long",
               year: "numeric",
-            })}
-          </p>
-          <p>
-            Time:{" "}
+            })}{" "}
             {new Date(appointment.scheduledAt).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: true,
             })}
           </p>
-          <p>Location: 123 Main St</p>
+          <p>Location: {appointment.location}</p>
         </Card.Text>
       </Card.Body>
     </Card>
   );
 };
 
-const PrescriptionCard = (props:any) => {
+const PrescriptionCard = (props: any) => {
   return (
     <Card className="shadow">
       <Card.Header>Notes</Card.Header>
       <Card.Body>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-            <Form.Control as="textarea" value={props.text} onChange={(e) => props.setText(e.target.value)} rows={20} />
+            <Form.Control
+              as="textarea"
+              value={props.text}
+              onChange={(e) => {
+                props.setText(e.target.value);
+                
+              }}
+              onKeyPress={(e) => {
+                console.log("Key pressed", e.key);
+                
+                props.setEvent(e.key);
+              }}
+              rows={20}
+            />
           </Form.Group>
         </Form>
       </Card.Body>
@@ -141,16 +164,84 @@ const PrescriptionCard = (props:any) => {
   );
 };
 
-const SuggestionsCard = (props:any) => {
+const SuggestionsCard = (props: any) => {
+  console.log("SuggestionsCard", props.event);
+
+  const callApi = async () => { 
+    try {
+      let myPrompt =
+        'You are Dr. Mini, a highly respected doctor with expertise in all medical fields, including pediatrics, internal medicine, oncology, and more. You are known for your meticulous attention to detail and ability to offer constructive feedback to other healthcare professionals. You are now reviewing a patient\'s recent visit to another doctor. Below you will find the patient\'s vital statistics, diagnosis, and visit notes. Please carefully review and give the doctor your dignosis, give ICD codes, if any, suggestions, if any, also point out the mistakes from the other doctors notes and return the response into an array of JSON objects in this format [{"type": "diagnosis", "description": ""},...{"type": "suggestion", "description": ""}] ';
+      let patientInfo: string =
+        "Patient info - Age: " +
+        (
+          new Date().getFullYear() -
+          new Date(props.patient?.dateOfBirth ?? "").getFullYear()
+        ).toString();
+      patientInfo = " complaints: " + props.appointment.reason.toString();
+      let vitalsString: string = " Vitals - ";
+      props.patient.vitals.forEach((item: { key: string; value: string }) => {
+        vitalsString +=
+          " " + item.key.toString() + " :" + item.value.toString();
+      });
+      myPrompt += patientInfo + vitalsString;
+      // if (props.patient.id === 'c55d4b92-a109-4ecd-89ea-140375520bf1') {
+      //   myPrompt.
+      // }
+      console.log("text" + props.text);
+      if (props.text) {
+        myPrompt += " " + props.text.toString();
+      }
+
+      console.log(myPrompt);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/generate`,
+        {
+          prompt: myPrompt,
+        }
+      );
+      setSuggestions(JSON.parse(response.data.message.content));
+    } catch (error) {
+      console.error("Failed to fetch appointments:", error);
+    }
+  }
+  if (props.event === '.') {
+    callApi();
+    props.setEvent("");
+  }
+
+  
   const [suggestions, setSuggestions] = useState([]);
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
+        let myPrompt =
+          'You are Dr. Mini, a highly respected doctor with expertise in all medical fields, including pediatrics, internal medicine, oncology, and more. You are known for your meticulous attention to detail and ability to offer constructive feedback to other healthcare professionals. You are now reviewing a patient\'s recent visit to another doctor. Below you will find the patient\'s vital statistics, diagnosis, and visit notes. Please carefully review and give the doctor your dignosis, give ICD codes, if any, suggestions, if any, into an array of JSON objects in this format [{"type": "diagnosis", "description": ""},...{"type": "suggestion", "description": ""}] ';
+        let patientInfo: string =
+          "Patient info - Age: " +
+          (
+            new Date().getFullYear() -
+            new Date(props.patient?.dateOfBirth ?? "").getFullYear()
+          ).toString();
+        patientInfo = " complaints: " + props.appointment.reason.toString();
+        let vitalsString: string = " Vitals - ";
+        props.patient.vitals.forEach((item: { key: string; value: string }) => {
+          vitalsString +=
+            " " + item.key.toString() + " :" + item.value.toString();
+        });
+        myPrompt += patientInfo + vitalsString;
+        // if (props.patient.id === 'c55d4b92-a109-4ecd-89ea-140375520bf1') {
+        //   myPrompt.
+        // }
+        console.log("text" + props.text);
+        if (props.text) {
+          myPrompt += props.text.toString();
+        }
+
+        console.log(myPrompt);
         const response = await axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/generate`,
           {
-            prompt:
-              'You are Dr. Mini, a highly respected doctor with expertise in all medical fields, including pediatrics, internal medicine, oncology, and more. You are known for your meticulous attention to detail and ability to offer constructive feedback to other healthcare professionals. You are now reviewing a patient\'s recent visit to another doctor. Below you will find the patient\'s vital statistics, diagnosis, and visit notes. Please carefully review and give the doctor your dignosis, give ICD codes, if any, suggestions, if any, into an array of JSON objects in this format [{"type": "diagnosis", "description": ""},...{"type": "suggestion", "description": ""}] .\nPatient Information:\nAge: 45\nGender: M\nBody Temp: 99.2°F\nBlood Pressure: 160/100 mmHg\nWeight: 85 kg\nHeight: 5ft10in\nOther doctors Visit Notes:\nThe patient presented with persistent headaches and elevated blood pressure. The doctor prescribed 100 mg of amlodipine daily and recommended immediate stress reduction techniques',
+            prompt: myPrompt,
           }
         );
         setSuggestions(JSON.parse(response.data.message.content));
@@ -158,15 +249,16 @@ const SuggestionsCard = (props:any) => {
         console.error("Failed to fetch appointments:", error);
       }
     };
-
-    fetchSuggestions();
+    // if (props.event === '.') {
+      fetchSuggestions();
+    // }
     console.log(suggestions);
   }, []);
 
   const handleDecline = (index: number) => {
     setSuggestions(suggestions.filter((_, i) => i !== index));
   };
-  
+
   return (
     <Card className="shadow">
       <Card.Header>Suggestions</Card.Header>
@@ -182,10 +274,21 @@ const SuggestionsCard = (props:any) => {
                 <p>{suggestion.description}</p>
               </Card.Text>
               <div className="d-flex justify-content-center">
-                <Button variant="primary" style={{ marginRight: "10px" }} onClick={() => props.setText(props.text+ "\n" + suggestion.description)}>
+                <Button
+                  variant="primary"
+                  style={{ marginRight: "10px" }}
+                  onClick={() =>
+                    props.setText(props.text + "\n" + suggestion.description)
+                  }
+                >
                   Accept
                 </Button>
-                <Button variant="secondary" onClick={() => handleDecline(index)}>Decline</Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => handleDecline(index)}
+                >
+                  Decline
+                </Button>
               </div>
             </div>
           )
@@ -195,15 +298,92 @@ const SuggestionsCard = (props:any) => {
   );
 };
 
-const NotesSection = (props:any) => {
+const SearchCard = (props: any) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      if (event.key === "Enter") {
+        const fetchSearchResults = async () => {
+          try {
+            setLoading(true);
+            const response = await axios.post(
+              `${process.env.REACT_APP_BACKEND_SERVER_URL}/generate`,
+              {
+                prompt: searchInput,
+              }
+            );
+            setSearchResults(response.data.message.content);
+          } catch (error) {
+            console.error("Failed to fetch appointments:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchSearchResults();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [searchInput]);
+
+  const handleChange = (event: any) => {
+    setSearchInput(event.target.value);
+  };
+
+  return (
+    <Card className="shadow">
+      <Card.Body>
+        <Form.Control
+          type="text"
+          value={searchInput}
+          onChange={handleChange}
+          placeholder="Ask me anything..."
+        />
+        {loading ? (
+          <p>
+            <hr />
+            Generating response...
+          </p>
+        ) : (
+          <p>
+            <hr />
+            {searchResults}
+          </p>
+        )}
+      </Card.Body>
+    </Card>
+  );
+};
+
+const NotesSection = (props: any) => {
   return (
     <section style={{ padding: "1em" }}>
       <Row className="d-flex align-items-stretch">
         <Col sm={6}>
-          <PrescriptionCard text={props.text} setText={props.setText} />
+          <PrescriptionCard
+            text={props.text}
+            setText={props.setText}
+            event={props.event}
+            setEvent={props.setEvent}
+          />
         </Col>
         <Col sm={6}>
-          <SuggestionsCard text={props.text} setText={props.setText} />
+          <SuggestionsCard
+            text={props.text}
+            patient={props.patient}
+            appointment={props.appointment}
+            setText={props.setText}
+            event={props.event}
+            setEvent={props.setEvent}
+          />
         </Col>
       </Row>
     </section>
@@ -219,12 +399,20 @@ const Prescription = () => {
   console.log("Prescription()", appointment);
 
   const [text, setText] = useState("");
+  const [event, setEvent] = useState("");
 
   return (
     <div>
       <HeaderSection />
       <PatientDetailSection patient={patient} appointment={appointment} />
-      <NotesSection text={text} setText={setText} />
+      <NotesSection
+        text={text}
+        patient={patient}
+        appointment={appointment}
+        setText={setText}
+        event={event}
+        setEvent={setEvent}
+      />
       <Footer />
     </div>
   );

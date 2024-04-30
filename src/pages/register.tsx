@@ -292,7 +292,7 @@ const Register = () => {
             onChange={handleRegisterChange}
             required
           >
-            <option value="">Select User Type</option>
+            {/* <option value="">Select User Type</option> */}
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
           </select>
