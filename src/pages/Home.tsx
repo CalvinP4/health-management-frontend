@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
 
@@ -30,20 +31,35 @@ const Home = () => {
     location: "", // Add location field for doctors
   });
 
-
-  const handleLoginSubmit = (e: any) => {
+  const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
-    // Logic for login
+
     console.log("Login form submitted:", loginForm);
     console.log("Login form submitted:", registerForm);
+
     if (registerForm.userType.toLowerCase() === "patient")
-        navigate("/patient-schedule")
-    else if (registerForm.userType.toLowerCase() === "doctor")
-        navigate("/doctor");;
+      navigate("/patient-schedule");
+    else if (registerForm.userType.toLowerCase() === "doctor") {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor`
+        );
+
+        response.data.forEach((doctor: any) => {
+          if (
+            doctor.email === loginForm.email &&
+            doctor.password === loginForm.password
+          ) {
+            navigate("/doctor");
+          }
+        });
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    }
   };
 
-
-  const handleRegisterChange = (e:any) => {
+  const handleRegisterChange = (e: any) => {
     const { name, value } = e.target;
     setRegisterForm((prevState) => ({
       ...prevState,
