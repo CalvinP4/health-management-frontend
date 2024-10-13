@@ -10,11 +10,12 @@ const Register = () => {
     lastName: "",
     email: "",
     gender: "",
-    dateOfBirth: "",
-    phone: "",
+    dob: "",
+    phoneNo: "",
     password: "",
     speciality: "", // Add speciality field for doctors
     location: "", // Add location field for doctors
+    
   });
 
   const handleRegisterChange = (e:any) => {
@@ -33,7 +34,7 @@ const Register = () => {
     // Make API call
     try {
       console.log(JSON.stringify(registerForm));
-      const response = await fetch(`http://localhost:3000/${registerForm.userType}s`, {
+      const response = await fetch(`http://localhost:3000/${registerForm.userType}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,26 +108,26 @@ const Register = () => {
         required
         style={{ width: "100%" }}
       />
-      <label htmlFor="dateOfBirth" style={{ display: "block" }}>
+      <label htmlFor="dob" style={{ display: "block" }}>
         Date of Birth:
       </label>
       <input
         type="date"
-        id="dateOfBirth"
-        name="dateOfBirth"
-        value={registerForm.dateOfBirth}
+        id="dob"
+        name="dob"
+        value={registerForm.dob}
         onChange={handleRegisterChange}
         required
         style={{ width: "100%" }}
       />
-      <label htmlFor="phone" style={{ display: "block" }}>
+      <label htmlFor="phoneNo" style={{ display: "block" }}>
         Phone:
       </label>
       <input
         type="tel"
-        id="phone"
-        name="phone"
-        value={registerForm.phone}
+        id="phoneNo"
+        name="phoneNo"
+        value={registerForm.phoneNo}
         onChange={handleRegisterChange}
         required
         style={{ width: "100%" }}
@@ -218,14 +219,14 @@ const Register = () => {
         <option value="Kaiser Santa Clara">Kaiser Santa Clara</option>
         <option value="Kaiser Fremont">Kaiser Fremont</option>
       </select>
-      <label htmlFor="phone" style={{ display: "block" }}>
+      <label htmlFor="phoneNo" style={{ display: "block" }}>
         Phone:
       </label>
       <input
         type="tel"
-        id="phone"
-        name="phone"
-        value={registerForm.phone}
+        id="phoneNo"
+        name="phoneNo"
+        value={registerForm.phoneNo}
         onChange={handleRegisterChange}
         required
         style={{ width: "100%" }}
