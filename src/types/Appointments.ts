@@ -1,14 +1,12 @@
 export interface Appointment {
-  id: string;
-  doctorId: string;
-  patientId: string;
-  fees: number;
-  scheduledAt: Date;
+  id: number;
+  doctorId: number;
+  patientId: number;
+  hospitalId: number;
+  startTime: Date;
+  endTime: Date;
+  type: string;
   reason: string;
-  location: string;
-  duration: number;
-  status: string;
-  cancelledAt: Date;
-  cancellation_reason: string;
-  note: string;
+  notes: string;
+  symptoms: string;
 }

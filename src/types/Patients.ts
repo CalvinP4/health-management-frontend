@@ -1,10 +1,13 @@
 export interface Patient {
-    id: string;
+    id: number;
     firstName: string;
+    middleName: string;
     lastName: string;
-    dateOfBirth: string;
-    gender: string;
+    dob: Date;
+    age: number;
     email: string;
-    phone: string;
-    vitals: [{key: string, value: string}];
+    phoneNo: string;
+    address: string;
+    password: string;
+    history: object;
 }

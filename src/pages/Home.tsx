@@ -50,7 +50,7 @@ const Home = () => {
             doctor.email === loginForm.email &&
             doctor.password === loginForm.password
           ) {
-            navigate("/doctor");
+            navigate("/doctor", {state: doctor});
           }
         });
       } catch (error) {

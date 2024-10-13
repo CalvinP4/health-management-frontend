@@ -1,10 +1,16 @@
 export interface Doctor {
-    id: string;
-    name: string;
+    id: number;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    dob: Date;
+    age: number;
     email: string;
-    phone: string;
-    specialty: string;
-    location: string;
-    dateOfBirth: Date;
-    availableSlots: { start: string; end: string }[];
+    phoneNo: string;
+    address: string;
+    password: string;
+    specialization: string;
+    licensedYear: Date;
+    licensedBy: string;
+    schedule: object;
 }

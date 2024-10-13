@@ -144,7 +144,7 @@ const AppointmentSection = () => {
           {appointments.map((appointment: any) => (
             <tr key={appointment.id}>
               <td>
-                Dr. {doctors.find((d: Doctor) => d.id === appointment.doctorId)?.name}
+                Dr. {doctors.find((d: Doctor) => d.id === appointment.doctorId)?.firstName}
               </td>
               <td>{new Date(appointment.scheduledAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
               <td>{new Date(appointment.scheduledAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</td>

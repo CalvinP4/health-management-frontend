@@ -89,18 +89,18 @@ const PatientCard = (props: any) => {
           <p>
             Age:{" "}
             {new Date().getFullYear() -
-              new Date(patient?.dateOfBirth ?? "").getFullYear()}
+              new Date(patient?.dob ?? "").getFullYear()}
           </p>
           <p>ID: {patient.id}</p>
           <hr />
           <h6>Vitals</h6>
-          {patient.vitals.map((v: { key: string; value: string }) => {
+          {/* {patient.history?.map((v: { key: string; value: string }) => {
             return (
               <p>
                 {v.key} : {v.value}
               </p>
             );
-          })}
+          })} */}
         </Card.Text>
       </Card.Body>
     </Card>
@@ -118,18 +118,18 @@ const AppointmentCard = (props: any) => {
         <Card.Text>
           <p>
             Date & Time:{" "}
-            {new Date(appointment.scheduledAt).toLocaleDateString("en-GB", {
+            {new Date(appointment.endTime).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "long",
               year: "numeric",
             })}{" "}
-            {new Date(appointment.scheduledAt).toLocaleTimeString("en-GB", {
+            {new Date(appointment.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: true,
             })}
           </p>
-          <p>Location: {appointment.location}</p>
+          <p>Location: {appointment.hospitalId}</p>
         </Card.Text>
       </Card.Body>
     </Card>
