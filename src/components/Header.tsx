@@ -1,9 +1,84 @@
-const Header = () => {
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import hospitalSvg from "../assets/hospital.png";
+
+const Header = (props: any) => {
     return (
-        <header>
-        <h1>My React App</h1>
-        </header>
+            <section>
+              <Navbar expand="lg" className="bg-body-tertiary">
+                <Container>
+                  <img
+                    src={hospitalSvg}
+                    alt="Doctor"
+                    style={{ marginLeft: "10px", height: "40px", width: "auto" }}
+                  />
+                  <Navbar.Brand
+                    style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}
+                  >
+                    {" "}
+                    MediTech HealthCare
+                  </Navbar.Brand>
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                  <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="ms-auto">
+                      <Button variant="outline-primary" style={styles.profileButton}>
+                        <div style={styles.profileImage}>
+                          {props.firstName[0]}
+                        </div>
+                      </Button>
+                    </Nav>
+                  </Navbar.Collapse>
+                </Container>
+              </Navbar>
+            </section>
     );
 }
+
+const styles = {
+    profileButton: {
+      borderRadius: "50%",
+      width: 40,
+      height: 40,
+      padding: 0,
+      oveflow: "hidden",
+    },
+    profileImage: {
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontSize: "24px",
+      fontWeight: "bold",
+      backgroundColor: "#007bff",
+      color: "white",
+      borderRadius: "50%",
+    },
+    buttonGrid: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: "50px",
+    },
+    imageButton: {
+      borderRadius: "50%",
+      padding: "10px",
+      overflow: "hidden",
+    },
+    image: {
+      borderRadius: "50",
+      width: "100px",
+      height: "100px",
+    },
+    buttonSection: {
+      padding: "20px",
+    },
+    profileSection: {
+      padding: "20px",
+      backgroundColor: "#c8f9fa",
+      display: "flex",
+      justifyContent: "space-between",
+    },
+  };
+  
 
 export default Header;

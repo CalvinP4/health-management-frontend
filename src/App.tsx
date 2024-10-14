@@ -7,6 +7,7 @@ import DoctorComponent from './pages/Doctor';
 import Register from './pages/Register';  
 import Appointments from './pages/Appointments'; 
 import DoctorSchedule from './pages/DoctorSchedule';
+import DoctorScheduleV2 from './pages/DoctorScheduleV2';
 import PatientSchedule from './pages/PatientSchedule';
 import Prescription from './pages/Prescription';
 
@@ -19,7 +20,7 @@ function App() {
       <Route path="/doctor" element={<DoctorComponent />} />
       <Route path="/register" element={<Register />} />
       <Route path="/appointments" element={<Appointments />} />
-      <Route path="/doctor-schedule" element={<DoctorSchedule />} />
+      <Route path="/doctor-schedule" element={<DoctorScheduleV2 />} />
       <Route path="/patient-schedule" element={<PatientSchedule />} />
       <Route path="/prescription" element={<Prescription />} />
       <Route path="*" element={<Home />} />

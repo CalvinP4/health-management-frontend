@@ -12,10 +12,9 @@ import {
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
-import profileLogo from "../assets/profile-user.png";
 import Footer from "../components/Footer";
 import { Appointment } from "../types/Appointments";
 import { Patient } from "../types/Patients";
@@ -25,7 +24,6 @@ import { useNavigate } from "react-router-dom";
 import { Doctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 
-const localizer = momentLocalizer(moment);
 
 interface IUpcomingAppointment {
   appointments: Appointment[];
@@ -46,7 +44,7 @@ const HeaderSection = (props: { doctor: Doctor }) => {
             style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}
           >
             {" "}
-            MediTech HealthCare{" "}
+            MediTech HealthCare
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -156,7 +154,6 @@ const DoctorComponent = () => {
   const location = useLocation();
   const doctor = location.state as Doctor;
 
-  const [showCalendar, setShowCalendar] = useState(true);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
 
