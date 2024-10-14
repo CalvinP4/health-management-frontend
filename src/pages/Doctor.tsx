@@ -23,9 +23,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Doctor } from "../types/Doctors";
-import doctorSvg from "../assets/doctor.svg";
 import hospitalSvg from "../assets/hospital.png";
-import doctorBackground from "../assets/healthcare.jpeg";
 
 const localizer = momentLocalizer(moment);
 
@@ -34,7 +32,7 @@ interface IUpcomingAppointment {
   patients: Patient[];
 }
 
-const HeaderSection = () => {
+const HeaderSection = (props: { doctor: Doctor }) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -54,7 +52,9 @@ const HeaderSection = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Button variant="outline-primary" style={styles.profileButton}>
-                <div style={styles.profileImage}>D</div>
+                <div style={styles.profileImage}>
+                  {props.doctor.firstName[0]}
+                </div>
               </Button>
             </Nav>
           </Navbar.Collapse>
@@ -64,19 +64,15 @@ const HeaderSection = () => {
   );
 };
 
-
 const UpcomingAppointments = (props: IUpcomingAppointment) => {
   const navigate = useNavigate();
 
-  console.log(props);
-  
   return (
     <section
       style={{ marginTop: "4rem", marginBottom: "4rem", padding: "2rem" }}
     >
       <h1>Scheduled Appointments</h1>
       {props.appointments.map((appointment: Appointment, index: number) => {
-
         const patient = props.patients.find(
           (p: Patient) => p.id === appointment.patientId
         );
@@ -102,7 +98,7 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
                 variant="primary"
                 onClick={() => {
                   navigate("/prescription", {
-                    state: { appointment, patient }
+                    state: { appointment, patient },
                   });
                 }}
               >
@@ -116,7 +112,7 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
   );
 };
 
-const DoctorProfile = (props: any) => {
+const DoctorProfile = (props: { doctor: Doctor }) => {
   const navigate = useNavigate();
   return (
     <div style={{ ...styles.profileSection }}>
@@ -128,18 +124,27 @@ const DoctorProfile = (props: any) => {
           height: "40%",
         }}
       >
-        Welcome Dr. James H!
+        Welcome Dr. {props.doctor.firstName} {props.doctor.lastName}
       </p>
       <div>
         <h3>Actions</h3>
         <Button
           variant="primary"
           className="mb-3"
-          onClick={() => props?.setShowCalendar(true)}
+          onClick={() => {
+            navigate("/doctor-schedule", { state: props.doctor });
+          }}
         >
           Update Schedule
         </Button>
-        <Button variant="secondary" className="mb-3">
+        <Button
+          variant="secondary"
+          className="mb-3"
+          onClick={() => {
+            console.log("Update Profile");
+            
+          }}
+        >
           Update Profile
         </Button>
       </div>
@@ -185,8 +190,8 @@ const DoctorComponent = () => {
 
   return (
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
-      <HeaderSection />
-      <DoctorProfile setShowCalendar={setShowCalendar} />
+      <HeaderSection doctor={doctor} />
+      <DoctorProfile doctor={doctor} />
       <UpcomingAppointments appointments={appointments} patients={patients} />
       <Footer />
     </div>

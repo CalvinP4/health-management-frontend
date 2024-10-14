@@ -392,11 +392,8 @@ const NotesSection = (props: any) => {
 
 const Prescription = () => {
   const location = useLocation();
-  //   console.log("helloooo");
   const patient: Patient = location.state.patient;
   const appointment: Appointment = location.state.appointment;
-  //   debugger;
-  console.log("Prescription()", appointment);
 
   const [text, setText] = useState("");
   const [event, setEvent] = useState("");
