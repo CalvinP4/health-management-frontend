@@ -27,15 +27,12 @@ const Home = () => {
     dateOfBirth: "",
     phone: "",
     password: "",
-    speciality: "", // Add speciality field for doctors
-    location: "", // Add location field for doctors
+    speciality: "", 
+    location: "", 
   });
 
   const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
-
-    console.log("Login form submitted:", loginForm);
-    console.log("Login form submitted:", registerForm);
 
     if (registerForm.userType.toLowerCase() === "patient")
       navigate("/patient-schedule");

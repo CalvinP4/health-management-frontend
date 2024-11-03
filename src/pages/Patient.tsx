@@ -21,7 +21,7 @@ import wallpaper1 from "../assets/wallpaper-1.jpg";
 import wallpaper2 from "../assets/wallpaper-2.jpeg";
 import wallpaper3 from "../assets/wallpaper-3.jpg";
 import { Appointment } from "../types/Appointments";
-import { Doctor } from "../types/Doctors";
+import { IDoctor } from "../types/Doctors";
 import patientSvg from "../assets/patientCare.png";
 
 // TODO: Needs to be fetched dynamically after logging in
@@ -90,7 +90,7 @@ const CarouselSection = () => {
 const AppointmentSection = () => {
   // State to store appointment data
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<IDoctor[]>([]);
 
   useEffect(() => {
     // Function to fetch appointment data from the backend
@@ -144,7 +144,7 @@ const AppointmentSection = () => {
           {appointments.map((appointment: any) => (
             <tr key={appointment.id}>
               <td>
-                Dr. {doctors.find((d: Doctor) => d.id === appointment.doctorId)?.firstName}
+                Dr. {doctors.find((d: IDoctor) => d.id === appointment.doctorId)?.firstName}
               </td>
               <td>{new Date(appointment.scheduledAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
               <td>{new Date(appointment.scheduledAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</td>
