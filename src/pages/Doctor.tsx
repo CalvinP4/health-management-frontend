@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Card,
-  Carousel,
   Container,
   Nav,
-  NavDropdown,
   Navbar,
-  Table,
 } from "react-bootstrap";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
-
-import { momentLocalizer } from "react-big-calendar";
-import moment from "moment";
 
 import Footer from "../components/Footer";
 import { Appointment } from "../types/Appointments";
@@ -21,7 +15,7 @@ import { Patient } from "../types/Patients";
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Doctor } from "../types/Doctors";
+import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 
 
@@ -30,7 +24,7 @@ interface IUpcomingAppointment {
   patients: Patient[];
 }
 
-const HeaderSection = (props: { doctor: Doctor }) => {
+const HeaderSection = (props: { doctor: IDoctor }) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -78,16 +72,16 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
         return (
           <Card style={{ width: "18rem" }}>
             <Card.Body>
-              <Card.Title>{appointment.patientId}</Card.Title>
+              <Card.Title>{patient?.firstName + " " + patient?.lastName}</Card.Title>
               <Card.Text>
                 <div>
                   <div>
                     Date: {new Date(appointment.startTime).toLocaleDateString()}
                   </div>
                   <div>
-                    Symptoms: {appointment.symptoms}
-                    Type: {appointment.type}
-                    Reason: {appointment.reason}
+                    <div>Symptoms: {appointment.symptoms}</div>
+                    <div>Type: {appointment.type}</div>
+                    <div>Reason: {appointment.reason}</div>
                   </div>
                 </div>
               </Card.Text>
@@ -110,7 +104,7 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
   );
 };
 
-const DoctorProfile = (props: { doctor: Doctor }) => {
+const DoctorProfile = (props: { doctor: IDoctor }) => {
   const navigate = useNavigate();
   return (
     <div style={{ ...styles.profileSection }}>
@@ -152,7 +146,7 @@ const DoctorProfile = (props: { doctor: Doctor }) => {
 
 const DoctorComponent = () => {
   const location = useLocation();
-  const doctor = location.state as Doctor;
+  const doctor = location.state as IDoctor;
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
