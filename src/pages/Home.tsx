@@ -35,7 +35,7 @@ const Home = () => {
     e.preventDefault();
 
     if (registerForm.userType.toLowerCase() === "patient")
-      navigate("/patient-schedule");
+      navigate("/patient");
     else if (registerForm.userType.toLowerCase() === "doctor") {
       try {
         const response = await axios.get(
