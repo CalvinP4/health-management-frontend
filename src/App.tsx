@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import Staff from './pages/Staff';
 import Patient from './pages/Patient';
 import DoctorComponent from './pages/Doctor';
-import Register from './pages/Register';  
+import Register from './pages/RegisterV2';  
 import Appointments from './pages/Appointments'; 
 import DoctorSchedule from './pages/DoctorSchedule';
 import DoctorScheduleV2 from './pages/DoctorScheduleV2';
