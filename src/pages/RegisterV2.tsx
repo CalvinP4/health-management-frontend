@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +34,15 @@ const Register = () => {
 
     // Make API call
     try {
-      
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient`,
+        registerForm
+      );
+
+      if (response.status === 200) {
+        console.log("User registered successfully:", response.data);
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -94,7 +103,6 @@ const Register = () => {
               name="middleName"
               value={registerForm.middleName}
               onChange={handleRegisterChange}
-              required
             />
           </Form.Group>
           <Form.Group>
@@ -123,8 +131,8 @@ const Register = () => {
             <Form.Label>Phone</Form.Label>
             <Form.Control
               type="text"
-              id="phone"
-              name="phone"
+              id="phoneNo"
+              name="phoneNo"
               value={registerForm.phoneNo}
               onChange={handleRegisterChange}
               required
