@@ -1,4 +1,4 @@
-export interface Appointment {
+export interface IAppointment {
   id: number;
   doctorId: number;
   patientId: number;

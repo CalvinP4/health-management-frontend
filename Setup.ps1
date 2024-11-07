@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS $databasename.tbl_patient (
     age	SMALLINT,
     address	VARCHAR(200),
     password VARCHAR(50),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     phone_no VARCHAR(11),
     history	JSON
     );
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS $databasename.tbl_doctor (
     age	SMALLINT,
     address	VARCHAR(200),
     password VARCHAR(50),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     phone_no VARCHAR(13),
     specialization	VARCHAR(200),
     licensed_year DATE,
