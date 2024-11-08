@@ -7,8 +7,8 @@ import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import profileLogo from "../assets/profile-user.png";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
-import { Patient } from "../types/Patients";
-import { Appointment } from "../types/Appointments";
+import { IPatient } from "../types/Patients";
+import { IAppointment } from "../types/Appointments";
 import axios from "axios";
 
 const HeaderSection = () => {
@@ -76,7 +76,7 @@ const PatientDetailSection = (props: any) => {
 };
 
 const PatientCard = (props: any) => {
-  const patient: Patient = props.patient;
+  const patient: IPatient = props.patient;
   return (
     <Card className="shadow">
       <Card.Header>Patient Details</Card.Header>
@@ -110,7 +110,7 @@ const PatientCard = (props: any) => {
 const AppointmentCard = (props: any) => {
   //   debugger;
   //   console.log(appointmentInput);
-  const appointment: Appointment = props.appointment;
+  const appointment: IAppointment = props.appointment;
   return (
     <Card className="shadow">
       <Card.Header>Appointment</Card.Header>
@@ -392,8 +392,8 @@ const NotesSection = (props: any) => {
 
 const Prescription = () => {
   const location = useLocation();
-  const patient: Patient = location.state.patient;
-  const appointment: Appointment = location.state.appointment;
+  const patient: IPatient = location.state.patient;
+  const appointment: IAppointment = location.state.appointment;
 
   const [text, setText] = useState("");
   const [event, setEvent] = useState("");

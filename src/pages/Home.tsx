@@ -27,16 +27,30 @@ const Home = () => {
     dateOfBirth: "",
     phone: "",
     password: "",
-    speciality: "", 
-    location: "", 
+    speciality: "",
+    location: "",
   });
 
   const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (registerForm.userType.toLowerCase() === "patient")
-      navigate("/patient");
-    else if (registerForm.userType.toLowerCase() === "doctor") {
+    if (registerForm.userType.toLowerCase() === "patient") {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient`
+        );
+        response.data.forEach((patient: any) => {
+          if (
+            patient.email === loginForm.email &&
+            patient.password === loginForm.password
+          ) {
+            navigate("/patient", { state: patient });
+          }
+        });
+      } catch (error) {
+        console.error("Failed to fetch patients:", error);
+      }
+    } else if (registerForm.userType.toLowerCase() === "doctor") {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor`
@@ -47,7 +61,7 @@ const Home = () => {
             doctor.email === loginForm.email &&
             doctor.password === loginForm.password
           ) {
-            navigate("/doctor", {state: doctor});
+            navigate("/doctor", { state: doctor });
           }
         });
       } catch (error) {

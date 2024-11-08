@@ -20,12 +20,9 @@ import Footer from "../components/Footer";
 import wallpaper1 from "../assets/wallpaper-1.jpg";
 import wallpaper2 from "../assets/wallpaper-2.jpeg";
 import wallpaper3 from "../assets/wallpaper-3.jpg";
-import { Appointment } from "../types/Appointments";
+import { IAppointment } from "../types/Appointments";
 import { IDoctor } from "../types/Doctors";
 import patientSvg from "../assets/patientCare.png";
-
-// TODO: Needs to be fetched dynamically after logging in
-const patientId = "bfe6db61-940e-4b86-9cc5-8870da49f033";
 
 const HeaderSection = () => {
   return (
@@ -89,20 +86,14 @@ const CarouselSection = () => {
 
 const AppointmentSection = () => {
   // State to store appointment data
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
 
   useEffect(() => {
     // Function to fetch appointment data from the backend
     const fetchAppointments = async () => {
       try {
-        // Make a GET request to fetch appointment data from the backend
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointments?patientId=${patientId}`
-        );
 
-        // Set the fetched appointment data in the state
-        setAppointments(response.data);
       } catch (error) {
         console.error("Failed to fetch appointments:", error);
       }

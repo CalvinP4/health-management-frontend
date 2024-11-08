@@ -3,20 +3,16 @@ import { useNavigate } from "react-router-dom"; // or 'react-router-dom' for rea
 
 // Import Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Appointment } from "../types/Appointments";
+import { IAppointment } from "../types/Appointments";
 import axios from "axios";
 
-// interface Appointment {
-//   doctorName: string;
-//   date: string;
-// }
 
 interface AppointmentsProps {
-  appointments: Appointment[];
+  appointments: IAppointment[];
 }
 
 interface AppointmentFormProps {
-  onSubmit: (appointmentDetails: Appointment) => void;
+  onSubmit: (appointmentDetails: IAppointment) => void;
   doctorsList: any[];
 }
 
@@ -53,13 +49,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // onSubmit({ doctorName, date });
   };
 
   const handleClick = async (event: any) => {
     event.preventDefault();
     let appointmentInfo: any = {};
-    // appointmentInfo.doctorId = getDoctorId(doctorName);
     appointmentInfo.patientId = "";
     appointmentInfo.doctorId = "";
     appointmentInfo.fees = 49.99;
@@ -213,7 +207,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 };
 
 function AppointmentScheduler() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
   // const [doctorNames, setDoctorNames] = useState<string[]>([]);
   const [doctors, setDoctors] = useState<[]>([]);
 
@@ -244,7 +238,7 @@ function AppointmentScheduler() {
     }
   };
 
-  const scheduleAppointment = async (appointmentDetails: Appointment) => {
+  const scheduleAppointment = async (appointmentDetails: IAppointment) => {
     try {
       const response = await fetch("api/appointments", {
         method: "POST",

@@ -6,7 +6,6 @@ import Patient from './pages/Patient';
 import DoctorComponent from './pages/Doctor';
 import Register from './pages/RegisterV2';  
 import Appointments from './pages/Appointments'; 
-import DoctorSchedule from './pages/DoctorSchedule';
 import DoctorScheduleV2 from './pages/DoctorScheduleV2';
 import PatientSchedule from './pages/PatientSchedule';
 import Prescription from './pages/Prescription';

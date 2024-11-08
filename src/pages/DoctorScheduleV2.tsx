@@ -4,14 +4,14 @@ import Footer from "../components/Footer";
 import { IDoctor } from "../types/Doctors";
 import { Button, Card, Modal, Tab, Tabs, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { Hospital } from "../types/Hospital";
+import { IHospital } from "../types/Hospital";
 import axios from "axios";
 
 const DoctorScheduleV2 = () => {
   const location = useLocation();
   const [doctor, setDoctor] = useState<IDoctor>(location.state as IDoctor);
 
-  const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [showSlotModal, setShowSlotModal] = useState<boolean>(false);
 
   const [slotForm, setSlotForm] = useState({

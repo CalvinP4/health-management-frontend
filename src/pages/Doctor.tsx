@@ -10,8 +10,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
 import Footer from "../components/Footer";
-import { Appointment } from "../types/Appointments";
-import { Patient } from "../types/Patients";
+import { IAppointment } from "../types/Appointments";
+import { IPatient } from "../types/Patients";
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +20,8 @@ import hospitalSvg from "../assets/hospital.png";
 
 
 interface IUpcomingAppointment {
-  appointments: Appointment[];
-  patients: Patient[];
+  appointments: IAppointment[];
+  patients: IPatient[];
 }
 
 const HeaderSection = (props: { doctor: IDoctor }) => {
@@ -64,9 +64,9 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
       style={{ marginTop: "4rem", marginBottom: "4rem", padding: "2rem" }}
     >
       <h1>Scheduled Appointments</h1>
-      {props.appointments.map((appointment: Appointment, index: number) => {
+      {props.appointments.map((appointment: IAppointment, index: number) => {
         const patient = props.patients.find(
-          (p: Patient) => p.id === appointment.patientId
+          (p: IPatient) => p.id === appointment.patientId
         );
 
         return (
@@ -148,8 +148,8 @@ const DoctorComponent = () => {
   const location = useLocation();
   const doctor = location.state as IDoctor;
 
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [patients, setPatients] = useState<Patient[]>([]);
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+  const [patients, setPatients] = useState<IPatient[]>([]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
