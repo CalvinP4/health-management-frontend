@@ -8,8 +8,9 @@ import {
   Nav,
   Navbar,
   DropdownButton,
-  Dropdown
+  Dropdown,
 } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import healthCareLogo from "../assets/health-care.svg";
 import history from "../assets/history.svg";
@@ -24,8 +25,12 @@ import { IDoctor } from "../types/Doctors";
 import patientSvg from "../assets/patientCare.png";
 import { useLocation } from "react-router-dom";
 import { IPatient } from "../types/Patients";
+import { IProfile } from "../types/Profile";
 
-const HeaderSection = (props: {firstName: string}) => {
+const HeaderSection = (props: {
+  firstName: string;
+  onSelect: (eventKey: any) => void;
+}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -39,7 +44,11 @@ const HeaderSection = (props: {firstName: string}) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <DropdownButton variant="Secondary" title={props.firstName[0]}>
+              <DropdownButton
+                variant="Secondary"
+                title={props.firstName[0]}
+                onSelect={props.onSelect}
+              >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
                 <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
               </DropdownButton>
@@ -218,10 +227,33 @@ const ButtonGridSection = () => {
 const Patient = () => {
   const location = useLocation();
   const patient = location.state as IPatient;
+  const navigate = useNavigate();
+
+  const onSelect = (eventKey: any) => {
+    if (eventKey === "1") {
+      navigate("/profile", {
+        state: {
+          isPatient: true,
+          profile: {
+            id: patient.id,
+            firstName: patient.firstName,
+            middleName: patient.middleName,
+            lastName: patient.lastName,
+            dob: patient.dob.toString(),
+            phoneNo: patient.phoneNo,
+            address: patient.address,
+            age: patient.age,
+            email: patient.email,
+            password: patient.password
+          } as IProfile,
+        },
+      });
+    }
+  };
 
   return (
     <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
-      <HeaderSection firstName={patient.firstName} />
+      <HeaderSection firstName={patient.firstName} onSelect={onSelect}/>
       <CarouselSection />
       <AppointmentSection />
       <ButtonGridSection />
