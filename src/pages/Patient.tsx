@@ -25,7 +25,7 @@ import patientSvg from "../assets/patientCare.png";
 import { useLocation } from "react-router-dom";
 import { IPatient } from "../types/Patients";
 
-const HeaderSection = (props: {firstName: string}) => {
+const PatientHeader = (props: {firstName: string}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -221,7 +221,7 @@ const Patient = () => {
 
   return (
     <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
-      <HeaderSection firstName={patient.firstName} />
+      <PatientHeader firstName={patient.firstName} />
       <CarouselSection />
       <AppointmentSection />
       <ButtonGridSection />
