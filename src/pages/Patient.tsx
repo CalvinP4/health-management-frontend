@@ -6,12 +6,11 @@ import {
   Carousel,
   Container,
   Nav,
-  NavDropdown,
   Navbar,
-  Table,
+  DropdownButton,
+  Dropdown
 } from "react-bootstrap";
 
-import profileLogo from "../assets/profile-user.png";
 import healthCareLogo from "../assets/health-care.svg";
 import history from "../assets/history.svg";
 import medicine from "../assets/medicine.svg";
@@ -23,27 +22,27 @@ import wallpaper3 from "../assets/wallpaper-3.jpg";
 import { IAppointment } from "../types/Appointments";
 import { IDoctor } from "../types/Doctors";
 import patientSvg from "../assets/patientCare.png";
+import { useLocation } from "react-router-dom";
+import { IPatient } from "../types/Patients";
 
-const HeaderSection = () => {
+const HeaderSection = (props: {firstName: string}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand>Patient Home</Navbar.Brand>
           <img
-              src={patientSvg}
-              alt="patient"
-              style={{ marginLeft: "0px", height: "60px", width: "1" }}
-            />
+            src={patientSvg}
+            alt="patient"
+            style={{ marginLeft: "0px", height: "60px", width: "1" }}
+          />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {/* <Nav className="mr-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-            </Nav> */}
             <Nav className="ms-auto">
-              <Button variant="outline-primary" style={styles.profileButton}>
-              <div style={styles.profileImage}>P</div>
-              </Button>
+              <DropdownButton variant="Secondary" title={props.firstName[0]}>
+                <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
+                <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
+              </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -57,14 +56,24 @@ const CarouselSection = () => {
     <section>
       <Carousel>
         <Carousel.Item>
-          <img className="d-block w-100" src={wallpaper1} alt="First slide" style={{height: '500px'}} />
+          <img
+            className="d-block w-100"
+            src={wallpaper1}
+            alt="First slide"
+            style={{ height: "500px" }}
+          />
           <Carousel.Caption>
             <h3>Health is Wealth</h3>
             <p></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img className="d-block w-100" src={wallpaper2} alt="Second slide" style={{height: '500px'}} />
+          <img
+            className="d-block w-100"
+            src={wallpaper2}
+            alt="Second slide"
+            style={{ height: "500px" }}
+          />
 
           <Carousel.Caption>
             <h3>Eating Healthy Cures</h3>
@@ -72,11 +81,15 @@ const CarouselSection = () => {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img className="d-block w-100" src={wallpaper3} alt="Third slide" style={{height: '500px'}} />
+          <img
+            className="d-block w-100"
+            src={wallpaper3}
+            alt="Third slide"
+            style={{ height: "500px" }}
+          />
           <Carousel.Caption>
             <h3>We are here to Care</h3>
-            <p>
-            </p>
+            <p></p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
@@ -93,7 +106,6 @@ const AppointmentSection = () => {
     // Function to fetch appointment data from the backend
     const fetchAppointments = async () => {
       try {
-
       } catch (error) {
         console.error("Failed to fetch appointments:", error);
       }
@@ -102,7 +114,9 @@ const AppointmentSection = () => {
     const fetchDoctors = async () => {
       try {
         // Make a GET request to fetch appointment data from the backend
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URL}/doctors`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctors`
+        );
 
         // Set the fetched appointment data in the state
         setDoctors(response.data);
@@ -135,10 +149,26 @@ const AppointmentSection = () => {
           {appointments.map((appointment: any) => (
             <tr key={appointment.id}>
               <td>
-                Dr. {doctors.find((d: IDoctor) => d.id === appointment.doctorId)?.firstName}
+                Dr.{" "}
+                {
+                  doctors.find((d: IDoctor) => d.id === appointment.doctorId)
+                    ?.firstName
+                }
               </td>
-              <td>{new Date(appointment.scheduledAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
-              <td>{new Date(appointment.scheduledAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</td>
+              <td>
+                {new Date(appointment.scheduledAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </td>
+              <td>
+                {new Date(appointment.scheduledAt).toLocaleTimeString("en-GB", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
+              </td>
               <td>{appointment.location}</td>
             </tr>
           ))}
@@ -155,12 +185,9 @@ const QuoteSection = () => {
         <Card.Header>Quote</Card.Header>
         <Card.Body>
           <blockquote className="blockquote mb-0">
-            <p>
-              {" "}
-              "Let food be thy medicine and medicine be thy food."{" "}
-            </p>
+            <p> "Let food be thy medicine and medicine be thy food." </p>
             <footer className="blockquote-footer">
-            Hippocrates <cite title="Source Title"></cite>
+              Hippocrates <cite title="Source Title"></cite>
             </footer>
           </blockquote>
         </Card.Body>
@@ -189,9 +216,12 @@ const ButtonGridSection = () => {
 };
 
 const Patient = () => {
+  const location = useLocation();
+  const patient = location.state as IPatient;
+
   return (
-    <div style={{paddingLeft: "15rem", paddingRight: "15rem"}}>
-      <HeaderSection />
+    <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
+      <HeaderSection firstName={patient.firstName} />
       <CarouselSection />
       <AppointmentSection />
       <ButtonGridSection />

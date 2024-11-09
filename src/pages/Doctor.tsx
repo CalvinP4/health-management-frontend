@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Container,
-  Nav,
-  Navbar,
-} from "react-bootstrap";
+import { Button, Card, Container, Nav, Navbar, DropdownButton, Dropdown } from "react-bootstrap";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
@@ -18,10 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 
-
 interface IUpcomingAppointment {
   appointments: IAppointment[];
   patients: IPatient[];
+  doctor: IDoctor;
 }
 
 const HeaderSection = (props: { doctor: IDoctor }) => {
@@ -43,11 +37,14 @@ const HeaderSection = (props: { doctor: IDoctor }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Button variant="outline-primary" style={styles.profileButton}>
-                <div style={styles.profileImage}>
-                  {props.doctor.firstName[0]}
-                </div>
-              </Button>
+                <DropdownButton
+                variant="Secondary"
+                title={props.doctor.firstName[0]}
+                style={{ borderRadius: "50%", width: "40px", height: "40px", padding: 0 }}
+                >
+                <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
+                </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -72,7 +69,9 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
         return (
           <Card style={{ width: "18rem" }}>
             <Card.Body>
-              <Card.Title>{patient?.firstName + " " + patient?.lastName}</Card.Title>
+              <Card.Title>
+                {patient?.firstName + " " + patient?.lastName}
+              </Card.Title>
               <Card.Text>
                 <div>
                   <div>
@@ -90,7 +89,7 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
                 variant="primary"
                 onClick={() => {
                   navigate("/prescription", {
-                    state: { appointment, patient },
+                    state: { appointment, patient, doctor: props.doctor },
                   });
                 }}
               >
@@ -134,7 +133,6 @@ const DoctorProfile = (props: { doctor: IDoctor }) => {
           className="mb-3"
           onClick={() => {
             console.log("Update Profile");
-            
           }}
         >
           Update Profile
@@ -183,7 +181,7 @@ const DoctorComponent = () => {
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
       <HeaderSection doctor={doctor} />
       <DoctorProfile doctor={doctor} />
-      <UpcomingAppointments appointments={appointments} patients={patients} />
+      <UpcomingAppointments appointments={appointments} patients={patients} doctor={doctor} />
       <Footer />
     </div>
   );
