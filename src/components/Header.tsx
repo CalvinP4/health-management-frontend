@@ -1,4 +1,4 @@
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import hospitalSvg from "../assets/hospital.png";
 
 const Header = (props: any) => {
@@ -6,7 +6,7 @@ const Header = (props: any) => {
             <section>
               <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
-                  <img
+                  <Image
                     src={hospitalSvg}
                     alt="Doctor"
                     style={{ marginLeft: "10px", height: "40px", width: "auto" }}
@@ -20,11 +20,10 @@ const Header = (props: any) => {
                   <Navbar.Toggle aria-controls="basic-navbar-nav" />
                   <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                      <Button variant="outline-primary" style={styles.profileButton}>
-                        <div style={styles.profileImage}>
-                          {props.firstName[0]}
-                        </div>
-                      </Button>
+                      <DropdownButton variant="Secondary" title={props.firstName[0]}>
+                        <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
+                        <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
+                      </DropdownButton>
                     </Nav>
                   </Navbar.Collapse>
                 </Container>

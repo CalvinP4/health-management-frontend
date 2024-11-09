@@ -3,49 +3,42 @@ import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
-import profileLogo from "../assets/profile-user.png";
+import { Button, Container, Nav, Navbar, DropdownButton, Dropdown } from "react-bootstrap";
+import hospitalSvg from "../assets/hospital.png";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 import { IPatient } from "../types/Patients";
 import { IAppointment } from "../types/Appointments";
 import axios from "axios";
+import { IDoctor } from "../types/Doctors";
 
-const HeaderSection = () => {
+const HeaderSection = (props: {doctor: IDoctor}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand>Doctor</Navbar.Brand>
+          <img
+            src={hospitalSvg}
+            alt="Doctor"
+            style={{ marginLeft: "10px", height: "40px", width: "auto" }}
+          />
+          <Navbar.Brand
+            style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}
+          >
+            {" "}
+            MediTech HealthCare
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-            </Nav>
             <Nav className="ms-auto">
-              <NavDropdown title="Appointments" id="appointment-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Past Appointments
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Book Slot
-                </NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Pharmacy" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Appointment History
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Past Appointments
-                </NavDropdown.Item>
-              </NavDropdown>
-              <Button variant="outline-primary" style={styles.profileButton}>
-                <img
-                  src={profileLogo}
-                  alt="Profile"
-                  style={styles.profileImage}
-                />
-              </Button>
+                <DropdownButton
+                variant="Secondary"
+                title={props.doctor.firstName[0]}
+                style={{ borderRadius: "50%", width: "40px", height: "40px", padding: 0 }}
+                >
+                <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
+                </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -392,15 +385,19 @@ const NotesSection = (props: any) => {
 
 const Prescription = () => {
   const location = useLocation();
+  const doctor = location.state.doctor as IDoctor;
   const patient: IPatient = location.state.patient;
   const appointment: IAppointment = location.state.appointment;
+
+  console.log("state", location.state);
+  
 
   const [text, setText] = useState("");
   const [event, setEvent] = useState("");
 
   return (
     <div>
-      <HeaderSection />
+      <HeaderSection doctor={doctor} />
       <PatientDetailSection patient={patient} appointment={appointment} />
       <NotesSection
         text={text}
