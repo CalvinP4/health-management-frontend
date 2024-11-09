@@ -1,8 +1,8 @@
 # Define MySQL credentials
 $mysqlUser = "root"
-$mysqlPassword = "admin"
+$mysqlPassword = "srdeepuN67*"
 $mysqlHost = "localhost"
-$databaseName = "healthdbtest"
+$databaseName = "healthdb"
 
 # Detect OS and set MySQL path accordingly
 if ($IsWindows) {
