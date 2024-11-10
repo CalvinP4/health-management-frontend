@@ -9,7 +9,7 @@ import Appointments from './pages/Appointments';
 import DoctorScheduleV2 from './pages/DoctorScheduleV2';
 import PatientSchedule from './pages/PatientSchedule';
 import Prescription from './pages/Prescription';
-import Profile from './pages/Profile';
+import Profile from './pages/profile/Profile';
 
 function App() {
   return (

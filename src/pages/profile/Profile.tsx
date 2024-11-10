@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Navbar,
   Container,
@@ -8,12 +9,12 @@ import {
   Button,
 } from "react-bootstrap";
 import hospitalSvg from "../assets/hospital.png";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IProfile } from "../types/Profile";
+import { IProfile } from "../../types/Profile";
 import axios from "axios";
-import { IPatient } from "../types/Patients";
+import { IPatient } from "../../types/Patients";
 
 const HeaderSection = (props: { firstName: string }) => {
   return (
@@ -185,11 +186,10 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("state", location.state);
-
   const [isPatient, setIsPatient] = useState<boolean>(
     location.state?.isPatient ?? false
   );
+  
   const [profile, setProfile] = useState<IProfile>(
     location.state?.profile ?? {
       id: 0,
