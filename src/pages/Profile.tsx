@@ -58,14 +58,14 @@ const HeaderSection = (props: { firstName: string }) => {
 const FormComponent = (props: {
   registerForm: IProfile;
   handleRegisterChange: any;
-  onSubmit:() => void;
+  onSubmit: (e: React.FormEvent) => void;
   isPatient: boolean;
 }) => {
   return (
     <Form
       style={{ display: "flex", flexDirection: "column" }}
       onSubmit={(e) => {
-        props.onSubmit();
+        props.onSubmit(e);
       }}
     >
       <Form.Group>
@@ -187,21 +187,26 @@ const Profile = () => {
 
   console.log("state", location.state);
 
-  const [isPatient, setIsPatient] = useState<boolean>(location.state?.isPatient ?? false);
-  const [profile, setProfile] = useState<IProfile>(location.state?.profile ?? {
-    id: 0,
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    dob: '',
-    phoneNo: '',
-    address: '',
-    password: '',
-    age: '',
-    email: ''
-  });
+  const [isPatient, setIsPatient] = useState<boolean>(
+    location.state?.isPatient ?? false
+  );
+  const [profile, setProfile] = useState<IProfile>(
+    location.state?.profile ?? {
+      id: 0,
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      dob: "",
+      phoneNo: "",
+      address: "",
+      password: "",
+      age: "",
+      email: "",
+    }
+  );
 
-  const updateProfile = async () => {
+  const updateProfile = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (isPatient) {
       try {
         const response = await axios.patch(
@@ -215,9 +220,8 @@ const Profile = () => {
         );
 
         if (response.status === 200) {
-          navigate("/patient", {
-            state:  response.data as IPatient,
-          });
+          console.log("Navigating with state:", response.data);
+          navigate("/patient", { state: response.data as IPatient });
         }
       } catch (error) {
         console.error("Failed to update profile:", error);

@@ -227,9 +227,20 @@ const ButtonGridSection = () => {
 const Patient = () => {
   const location = useLocation();
   const patient = location.state as IPatient;
+  console.log("location", location.state);
+
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!patient) {
+      console.warn("Patient data not available, redirecting to home");
+      navigate("/home"); // Redirect to a safe page
+    }
+  }, [patient, navigate]);
+
   const onSelect = (eventKey: any) => {
+    console.log("On Select called");
+
     if (eventKey === "1") {
       navigate("/profile", {
         state: {
@@ -244,7 +255,7 @@ const Patient = () => {
             address: patient.address,
             age: patient.age,
             email: patient.email,
-            password: patient.password
+            password: patient.password,
           } as IProfile,
         },
       });
@@ -253,7 +264,7 @@ const Patient = () => {
 
   return (
     <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
-      <HeaderSection firstName={patient.firstName} onSelect={onSelect}/>
+      <HeaderSection firstName={patient.firstName} onSelect={onSelect} />
       <CarouselSection />
       <AppointmentSection />
       <ButtonGridSection />
