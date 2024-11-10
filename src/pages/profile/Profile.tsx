@@ -173,6 +173,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Button
+        data-testid="profile-update-btn"
         variant="primary"
         type="submit"
         style={{ width: "10%", marginTop: "16px", alignSelf: "center" }}

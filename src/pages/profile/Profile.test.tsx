@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Profile from './Profile';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -70,7 +70,9 @@ describe('Profile Component', () => {
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'newpassword' } });
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'new.email@example.com' } });
 
-    fireEvent.click(screen.getByText('Update'));
+    fireEvent.click(screen.getByTestId('profile-update-btn'));
+
+    await waitFor(() => expect(axios.patch).toHaveBeenCalled());
 
     expect(axios.patch).toHaveBeenCalledWith(
       `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient/1`,
@@ -82,7 +84,7 @@ describe('Profile Component', () => {
       }
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/patient', { state: { id: 1 } });
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/patient', { state: { id: 1 } }));
   });
 
   test('form fields change correctly', () => {
