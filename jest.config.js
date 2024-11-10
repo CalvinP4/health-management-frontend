@@ -9,4 +9,5 @@ module.exports = {
     "node_modules/(?!(axios)/)", // Add axios here to transform its ES module syntax
   ],
   testEnvironment: "jest-environment-jsdom", 
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
 };

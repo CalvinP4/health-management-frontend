@@ -70,8 +70,9 @@ const FormComponent = (props: {
       }}
     >
       <Form.Group>
-        <Form.Label>First Name</Form.Label>
+        <Form.Label htmlFor="firstName">First Name</Form.Label>
         <Form.Control
+          id="firstName"
           type="text"
           name="firstName"
           disabled
@@ -81,7 +82,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Middle Name</Form.Label>
+        <Form.Label htmlFor="middleName">Middle Name</Form.Label>
         <Form.Control
           type="text"
           id="middleName"
@@ -92,7 +93,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Last Name</Form.Label>
+        <Form.Label htmlFor="lastName">Last Name</Form.Label>
         <Form.Control
           type="text"
           id="lastName"
@@ -104,7 +105,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>DOB</Form.Label>
+        <Form.Label htmlFor="dob">DOB</Form.Label>
         <Form.Control
           type="date"
           id="dob"
@@ -116,7 +117,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Phone</Form.Label>
+        <Form.Label htmlFor="phoneNo">Phone</Form.Label>
         <Form.Control
           type="text"
           id="phoneNo"
@@ -127,7 +128,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Age</Form.Label>
+        <Form.Label htmlFor="age">Age</Form.Label>
         <Form.Control
           type="number"
           id="age"
@@ -139,7 +140,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Address</Form.Label>
+        <Form.Label htmlFor="address">Address</Form.Label>
         <Form.Control
           type="text"
           id="address"
@@ -150,7 +151,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Email</Form.Label>
+        <Form.Label htmlFor="email">Email</Form.Label>
         <Form.Control
           type="email"
           id="email"
@@ -161,7 +162,7 @@ const FormComponent = (props: {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Password</Form.Label>
+        <Form.Label htmlFor="password">Password</Form.Label>
         <Form.Control
           type="password"
           id="password"

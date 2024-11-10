@@ -45,15 +45,15 @@ describe('Profile Component', () => {
         <Profile />
       </BrowserRouter>
     );
-    expect(screen.getByLabelText('First Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Middle Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Last Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('DOB')).toBeInTheDocument();
-    expect(screen.getByLabelText('Phone')).toBeInTheDocument();
-    expect(screen.getByLabelText('Age')).toBeInTheDocument();
-    expect(screen.getByLabelText('Address')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
+    expect((screen.getByLabelText('First Name') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Middle Name') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Last Name') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('DOB') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Phone') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Age') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Address') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Email') as HTMLInputElement)).toBeInTheDocument();
+    expect((screen.getByLabelText('Password') as HTMLInputElement)).toBeInTheDocument();
   });
 
   test('form submission works correctly', async () => {
