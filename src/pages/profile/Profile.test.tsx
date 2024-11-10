@@ -56,7 +56,7 @@ describe('Profile Component', () => {
     expect((screen.getByLabelText('Password') as HTMLInputElement)).toBeInTheDocument();
   });
 
-  test('form submission works correctly', async () => {
+  test('form submission works correctly for patient', async () => {
     (axios.patch as jest.Mock).mockResolvedValue({ status: 200, data: { id: 1 } });
 
     render(
@@ -85,6 +85,57 @@ describe('Profile Component', () => {
     );
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/patient', { state: { id: 1 } }));
+  });
+
+  test('form submission works correctly for doctor', async () => {
+
+    (axios.patch as jest.Mock).mockResolvedValue({ status: 200, data: { id: 1 } });
+
+    const useLocationMock = jest.spyOn(require('react-router-dom'), 'useLocation');
+    useLocationMock.mockReturnValue({
+      state: {
+        isPatient: false,
+        profile: {
+          id: 1,
+          firstName: 'John',
+          middleName: 'Doe',
+          lastName: 'Smith',
+          dob: '1990-01-01',
+          phoneNo: '1234567890',
+          address: '123 Main St',
+          password: 'password',
+          age: '30',
+          email: 'john.doe@example.com',
+        },
+      },
+    });
+
+    render(
+      <BrowserRouter>
+        <Profile />
+      </BrowserRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Phone'), { target: { value: '0987654321' } });
+    fireEvent.change(screen.getByLabelText('Address'), { target: { value: '456 Another St' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'newpassword' } });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'new.email@example.com' } });
+
+    fireEvent.click(screen.getByTestId('profile-update-btn'));
+
+    await waitFor(() => expect(axios.patch).toHaveBeenCalled());
+
+    expect(axios.patch).toHaveBeenCalledWith(
+      `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/1`,
+      {
+        phoneNo: '0987654321',
+        address: '456 Another St',
+        password: 'newpassword',
+        email: 'new.email@example.com',
+      }
+    );
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/doctor', { state: { id: 1 } }));
   });
 
   test('form fields change correctly', () => {

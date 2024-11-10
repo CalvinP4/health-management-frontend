@@ -8,7 +8,7 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import hospitalSvg from "../assets/hospital.png";
+import hospitalSvg from "../../assets/hospital.png";
 import Footer from "../../components/Footer";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -188,7 +188,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isPatient, setIsPatient] = useState<boolean>(
+  const [isPatient] = useState<boolean>(
     location.state?.isPatient ?? false
   );
   
@@ -229,6 +229,24 @@ const Profile = () => {
         console.error("Failed to update profile:", error);
       }
     } else {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/${profile.id}`,
+          {
+            phoneNo: profile.phoneNo,
+            address: profile.address,
+            password: profile.password,
+            email: profile.email,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("Navigating with state:", response.data);
+          navigate("/doctor", { state: response.data as IPatient });
+        }
+      } catch (error) {
+        console.error("Failed to update profile:", error);
+      }
     }
   };
 
