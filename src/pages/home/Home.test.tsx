@@ -16,7 +16,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Home Component", () => {
+describe("Home Page", () => {
   test("renders Login Form correctly", () => {
     render(
       <BrowserRouter>

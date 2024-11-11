@@ -86,9 +86,11 @@ const Register = () => {
       >
         <Form onSubmit={handleRegisterSubmit}>
           <Form.Group>
-            <Form.Label>First Name</Form.Label>
+            <Form.Label htmlFor="firstName">First Name</Form.Label>
             <Form.Control
               type="text"
+              data-testid="firstName"
+              id="firstName"
               name="firstName"
               value={registerForm.firstName}
               onChange={handleRegisterChange}
@@ -96,9 +98,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Middle Name</Form.Label>
+            <Form.Label htmlFor="middleName">Middle Name</Form.Label>
             <Form.Control
               type="text"
+              data-testid="middleName"
               id="middleName"
               name="middleName"
               value={registerForm.middleName}
@@ -106,9 +109,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Last Name</Form.Label>
+            <Form.Label htmlFor="lastName">Last Name</Form.Label>
             <Form.Control
               type="text"
+              data-testid="lastName"
               id="lastName"
               name="lastName"
               value={registerForm.lastName}
@@ -117,9 +121,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>DOB</Form.Label>
+            <Form.Label htmlFor="dob">DOB</Form.Label>
             <Form.Control
               type="date"
+              data-testid="dob"
               id="dob"
               name="dob"
               value={registerForm.dob}
@@ -128,9 +133,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Phone</Form.Label>
+            <Form.Label htmlFor="phoneNo">Phone</Form.Label>
             <Form.Control
               type="text"
+              data-testid="phoneNo"
               id="phoneNo"
               name="phoneNo"
               value={registerForm.phoneNo}
@@ -139,9 +145,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Age</Form.Label>
+            <Form.Label htmlFor="age">Age</Form.Label>
             <Form.Control
               type="number"
+              data-testid="age"
               id="age"
               name="age"
               value={registerForm.age}
@@ -150,9 +157,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Address</Form.Label>
+            <Form.Label htmlFor="address">Address</Form.Label>
             <Form.Control
               type="text"
+              data-testid="address"
               id="address"
               name="address"
               value={registerForm.address}
@@ -161,9 +169,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Email</Form.Label>
+            <Form.Label htmlFor="email">Email</Form.Label>
             <Form.Control
               type="email"
+              data-testid="email"
               id="email"
               name="email"
               value={registerForm.email}
@@ -172,9 +181,10 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Password</Form.Label>
+            <Form.Label htmlFor="password">Password</Form.Label>
             <Form.Control
               type="password"
+              data-testid="password"
               id="password"
               name="password"
               value={registerForm.password}
@@ -183,6 +193,7 @@ const Register = () => {
             />
           </Form.Group>
           <Button
+            data-testid="submit-btn"
             variant="primary"
             type="submit"
             style={{ width: "100%", marginTop: "16px" }}
