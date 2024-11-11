@@ -1,8 +1,9 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Profile from './Profile';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
+import React from 'react';
+
 
 jest.mock('axios');
 

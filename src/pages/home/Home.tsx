@@ -1,5 +1,6 @@
+import React from 'react';
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
 
 const Home = () => {
@@ -56,11 +57,12 @@ const Home = () => {
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor`
         );
 
+
         response.data.forEach((doctor: any) => {
           if (
             doctor.email === loginForm.email &&
             doctor.password === loginForm.password
-          ) {
+          ) {            
             navigate("/doctor", { state: doctor });
           }
         });
@@ -120,6 +122,7 @@ const Home = () => {
             I am a :{" "}
           </label>
           <select
+            data-testid="userType"
             id="userType"
             name="userType"
             value={registerForm.userType}
@@ -135,6 +138,7 @@ const Home = () => {
           </label>
           <input
             type="text"
+            data-testid="email"
             id="email"
             name="email"
             value={loginForm.email}
@@ -147,6 +151,7 @@ const Home = () => {
           </label>
           <input
             type="password"
+            data-testid="password"
             id="password"
             name="password"
             value={loginForm.password}
@@ -155,6 +160,7 @@ const Home = () => {
             style={{ width: "100%" }}
           />
           <input
+            data-testid="login-btn"
             type="submit"
             value="Login"
             style={{
@@ -172,7 +178,7 @@ const Home = () => {
         <div
           style={{ textAlign: "center", marginTop: "10px", fontWeight: "bold" }}
         >
-          <Link to="/register" style={{ color: "#4CAF50" }}>
+          <Link data-testid="register-link" to="/register" style={{ color: "#4CAF50" }}>
             New User? Register Here
           </Link>
         </div>
