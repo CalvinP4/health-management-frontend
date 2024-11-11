@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Home from "./Home";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import React from "react";
 
@@ -11,6 +11,10 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockNavigate,
 }));
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe("Home Component", () => {
   test("renders Login Form correctly", () => {
@@ -97,16 +101,19 @@ describe("Home Component", () => {
     );
   });
 
-  test('register link navigates to the correct route', () => {
+  test("register link navigates to the correct route", async () => {
     render(
-      <BrowserRouter>
-        <Home />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<div>Register Page</div>} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    const registerLink = screen.getByTestId('register-link');
+    const registerLink = screen.getByTestId("register-link");
     fireEvent.click(registerLink);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/register');
+    expect(await screen.findByText('Register Page')).toBeInTheDocument();
   });
 });
