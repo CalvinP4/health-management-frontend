@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS $databasename.tbl_hospital (
     name VARCHAR(200),
     county VARCHAR(100),
     state CHAR(2),
+    street VARCHAR(200),
     beds_total INT,
     beds_available INT,
     UNIQUE (name, county, state)

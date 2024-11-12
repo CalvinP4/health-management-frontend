@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Button, Card, Container, Nav, Navbar, DropdownButton, Dropdown } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Nav,
+  Navbar,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
@@ -11,6 +19,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
+import { IProfile } from "../types/Profile";
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
@@ -18,7 +27,7 @@ interface IUpcomingAppointment {
   doctor: IDoctor;
 }
 
-const HeaderSection = (props: { doctor: IDoctor }) => {
+const HeaderSection = (props: { doctor: IDoctor,  onSelect: (eventKey: any) => void;}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -37,14 +46,20 @@ const HeaderSection = (props: { doctor: IDoctor }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-                <DropdownButton
+              <DropdownButton
+                onSelect={props.onSelect}
                 variant="Secondary"
                 title={props.doctor.firstName[0]}
-                style={{ borderRadius: "50%", width: "40px", height: "40px", padding: 0 }}
-                >
+                style={{
+                  borderRadius: "50%",
+                  width: "40px",
+                  height: "40px",
+                  padding: 0,
+                }}
+              >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
                 <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
-                </DropdownButton>
+              </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -143,11 +158,36 @@ const DoctorProfile = (props: { doctor: IDoctor }) => {
 };
 
 const DoctorComponent = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const doctor = location.state as IDoctor;
 
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [patients, setPatients] = useState<IPatient[]>([]);
+
+  const onSelect = (eventKey: any) => {
+    console.log("On Select called");
+
+    if (eventKey === "1") {
+      navigate("/profile", {
+        state: {
+          isPatient: false,
+          profile: {
+            id: doctor.id,
+            firstName: doctor.firstName,
+            middleName: doctor.middleName,
+            lastName: doctor.lastName,
+            dob: doctor.dob.toString(),
+            phoneNo: doctor.phoneNo,
+            address: doctor.address,
+            age: doctor.age,
+            email: doctor.email,
+            password: doctor.password,
+          } as IProfile,
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -179,9 +219,13 @@ const DoctorComponent = () => {
 
   return (
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
-      <HeaderSection doctor={doctor} />
+      <HeaderSection doctor={doctor} onSelect={onSelect}/>
       <DoctorProfile doctor={doctor} />
-      <UpcomingAppointments appointments={appointments} patients={patients} doctor={doctor} />
+      <UpcomingAppointments
+        appointments={appointments}
+        patients={patients}
+        doctor={doctor}
+      />
       <Footer />
     </div>
   );
