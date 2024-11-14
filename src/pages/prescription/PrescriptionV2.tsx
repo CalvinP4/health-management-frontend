@@ -1,9 +1,8 @@
-import { LocalHospital, Medication, Mic, Notes } from "@mui/icons-material";
+import { LocalHospital } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
   Box,
-  Card,
   Container,
   Grid,
   Grid2,
@@ -179,8 +178,12 @@ const PrescriptionV2 = () => {
     setAnchorElUser(null);
   };
 
-  const handleOpenTestModal = () => {setIsTestModalOpen(true);};
-  const handleCloseTestModal = () => {setIsTestModalOpen(false);};
+  const handleOpenTestModal = () => {
+    setIsTestModalOpen(true);
+  };
+  const handleCloseTestModal = () => {
+    setIsTestModalOpen(false);
+  };
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -226,7 +229,7 @@ const PrescriptionV2 = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
       <div>
         <Header
           handleOpenUserMenu={handleOpenUserMenu}
@@ -235,7 +238,17 @@ const PrescriptionV2 = () => {
           navigateToProfile={navigateToProfile}
         />
       </div>
-      <div style={{ height: "80vh", overflowY: "scroll", padding: "4rem" }}>
+      <Box sx={{ width:"30%", backgroundColor: "#e8f5fe", marginTop:5, marginLeft: 1, padding: 1}}>
+        <Grid2>
+          <Grid2 size={6}>
+            <Typography variant="h6">Hi, Dr. {doctor.firstName}</Typography>
+            <Typography>Appointment: 1</Typography>
+            <Typography>Location: County general hospital</Typography>
+            <Typography>Date: 22-02-2022</Typography>
+          </Grid2>
+        </Grid2>
+      </Box>
+      <div style={{ height: "80vh", overflowY: "scroll", padding: "2rem" }}>
         <Grid2 container spacing={2}>
           <Grid2 size={3}>
             <PatientDetailsCard patient={patient} />
@@ -254,9 +267,7 @@ const PrescriptionV2 = () => {
           </Grid2>
           <Grid2 size={3}>
             <ChatGPTCard />
-            <TestHistoryCard 
-              openModal={handleOpenTestModal}
-            />
+            <TestHistoryCard openModal={handleOpenTestModal} />
           </Grid2>
         </Grid2>
         <Modal
@@ -283,13 +294,13 @@ const PrescriptionV2 = () => {
 };
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };

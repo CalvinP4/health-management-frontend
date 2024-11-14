@@ -11,6 +11,8 @@ import {
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
+import { Button as ButtonMUI } from "@mui/material";
+
 import Footer from "../components/Footer";
 import { IAppointment } from "../types/Appointments";
 import { IPatient } from "../types/Patients";
@@ -20,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 import { IProfile } from "../types/Profile";
+import { AccountBox, Schedule } from "@mui/icons-material";
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
@@ -27,7 +30,10 @@ interface IUpcomingAppointment {
   doctor: IDoctor;
 }
 
-const HeaderSection = (props: { doctor: IDoctor,  onSelect: (eventKey: any) => void;}) => {
+const HeaderSection = (props: {
+  doctor: IDoctor;
+  onSelect: (eventKey: any) => void;
+}) => {
   return (
     <section>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -134,24 +140,16 @@ const DoctorProfile = (props: { doctor: IDoctor }) => {
       </p>
       <div>
         <h3>Actions</h3>
-        <Button
-          variant="primary"
-          className="mb-3"
-          onClick={() => {
+        <ButtonMUI variant="contained" onClick={() => {
             navigate("/doctor-schedule", { state: props.doctor });
-          }}
-        >
-          Update Schedule
-        </Button>
-        <Button
-          variant="secondary"
-          className="mb-3"
-          onClick={() => {
+          }} startIcon={<Schedule />}>
+          Schedule
+        </ButtonMUI>
+        <ButtonMUI sx={{marginLeft: 2}} variant="contained" onClick={() => {
             console.log("Update Profile");
-          }}
-        >
-          Update Profile
-        </Button>
+          }} startIcon={<AccountBox />}>
+          Profile
+        </ButtonMUI>
       </div>
     </div>
   );
@@ -219,7 +217,7 @@ const DoctorComponent = () => {
 
   return (
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
-      <HeaderSection doctor={doctor} onSelect={onSelect}/>
+      <HeaderSection doctor={doctor} onSelect={onSelect} />
       <DoctorProfile doctor={doctor} />
       <UpcomingAppointments
         appointments={appointments}
