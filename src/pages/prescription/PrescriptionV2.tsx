@@ -11,11 +11,12 @@ import {
   Link,
   Menu,
   MenuItem,
+  Modal,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IPatient } from "../../types/Patients";
@@ -28,6 +29,7 @@ import PatientHistoryTabs from "./components/PatientHistoryTabs";
 import NotesTab from "./components/NotesTab";
 import ChatGPTCard from "./components/ChatGPTCard";
 import TestHistoryCard from "./components/TestHistoryCard";
+import axios from "axios";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -87,22 +89,6 @@ const Header = (props: {
     </AppBar>
   );
 };
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
 
 const Footer = () => {
   return (
@@ -170,8 +156,12 @@ const Footer = () => {
 
 const PrescriptionV2 = () => {
   const [activeHistoryTab, setActiveHistoryTab] = React.useState(0);
-
   const [activeNotesTab, setActiveNotesTab] = React.useState(0);
+  const [description, setDescription] = React.useState("");
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [isTestModalOpen, setIsTestModalOpen] = React.useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveHistoryTab(newValue);
@@ -181,10 +171,6 @@ const PrescriptionV2 = () => {
     setActiveNotesTab(newValue);
   };
 
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -193,11 +179,31 @@ const PrescriptionV2 = () => {
     setAnchorElUser(null);
   };
 
+  const handleOpenTestModal = () => {setIsTestModalOpen(true);};
+  const handleCloseTestModal = () => {setIsTestModalOpen(false);};
+
   const location = useLocation();
   const navigate = useNavigate();
   const doctor = location.state.doctor as IDoctor;
   const patient: IPatient = location.state.patient;
   const appointment: IAppointment = location.state.appointment;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/get-history${patient.id}`
+        );
+        console.log("Data fetched:", response);
+
+        setDescription(response.data.response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [patient]);
 
   const navigateToProfile = () => {
     navigate("/profile", {
@@ -239,6 +245,7 @@ const PrescriptionV2 = () => {
             <PatientHistoryTabs
               value={activeHistoryTab}
               handleChange={handleChange}
+              history={description}
             />
             <NotesTab value={activeNotesTab} handleChange={handleChange2} />
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
@@ -247,15 +254,44 @@ const PrescriptionV2 = () => {
           </Grid2>
           <Grid2 size={3}>
             <ChatGPTCard />
-            <TestHistoryCard />
+            <TestHistoryCard 
+              openModal={handleOpenTestModal}
+            />
           </Grid2>
         </Grid2>
+        <Modal
+          open={isTestModalOpen}
+          onClose={handleCloseTestModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
       </div>
       <div>
         <Footer />
       </div>
     </div>
   );
+};
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
 };
 
 export default PrescriptionV2;

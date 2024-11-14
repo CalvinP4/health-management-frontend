@@ -29,6 +29,7 @@ function CustomTabPanel(props: TabPanelProps) {
 const PatientHistoryTabs = (props: {
   value: number;
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;
+  history: string;
 }) => {
   return (
     <>
@@ -48,8 +49,7 @@ const PatientHistoryTabs = (props: {
       <Box sx={{ height: 200, overflowY: "auto" }}>
         <CustomTabPanel value={props.value} index={0}>
           <Typography>
-            Patient has a history of diabetes and hypertension. He is on a 2mg
-            dose of Metformin and 5 mg dose of Lisinopril.
+            {props.history}
           </Typography>
         </CustomTabPanel>
         <CustomTabPanel value={props.value} index={1}>
@@ -96,72 +96,6 @@ const PatientHistoryTabs = (props: {
               <Typography>
                 <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
                 <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Metformin:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>2mg</span>
-              </Typography>
-            </li>
-            <li>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>Lisinopril:</span>{" "}
-                <span style={{ fontStyle: "italic" }}>5mg</span>
               </Typography>
             </li>
           </ul>
