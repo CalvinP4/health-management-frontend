@@ -3,6 +3,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  CircularProgress,
   Container,
   Grid,
   Grid2,
@@ -166,6 +167,8 @@ const PrescriptionV2 = () => {
     null
   );
   const [isTestModalOpen, setIsTestModalOpen] = React.useState(false);
+  const [bloodReport, setBloodReport] = React.useState("");
+  
   const [numPages, setNumPages] = React.useState<number>();
   const [pageNumber, setPageNumber] = React.useState<number>(1);
 
@@ -189,8 +192,28 @@ const PrescriptionV2 = () => {
     setAnchorElUser(null);
   };
 
-  const handleOpenTestModal = () => {
+  const handleOpenTestModal = async () => {
     setIsTestModalOpen(true);
+
+    // send the PDF file to the backend to get the insights
+    const formData = new FormData();
+    const blob = await fetch(pdfFile).then((r) => r.blob());
+    formData.append("pdf", blob, "mock2.pdf");
+    console.log(pdfFile);
+    
+
+    axios
+      .post("http://localhost:8000/upload-pdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setBloodReport(response.data.insights[0].content[0].text.value);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
   const handleCloseTestModal = () => {
     setIsTestModalOpen(false);
@@ -204,16 +227,16 @@ const PrescriptionV2 = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/get-history${patient.id}`
-        );
-        console.log("Data fetched:", response);
+      // try {
+      //   const response = await axios.get(
+      //     `http://localhost:8000/get-history${patient.id}`
+      //   );
+      //   console.log("Data fetched:", response);
 
-        setDescription(response.data.response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      //   setDescription(response.data.response);
+      // } catch (error) {
+      //   console.error("Error fetching data:", error);
+      // }
     };
 
     fetchData();
@@ -339,16 +362,7 @@ const PrescriptionV2 = () => {
             <Box sx={{marginTop: 2, outline: "1px solid #000", padding: 1}}>
               <Typography variant="h5">Summary Insights</Typography>
               <Typography>
-                The patient's lipid profile shows cholesterol and triglyceride
-                levels within borderline high limits, which may require
-                lifestyle adjustments to prevent cardiovascular risks. Fasting
-                blood sugar and HbA1c levels indicate poor glycemic control,
-                suggesting the need for dietary changes and diabetes management.
-                The complete blood count reveals a slightly elevated white blood
-                cell count, likely indicative of a recent infection or
-                inflammation. Vitamin D and B12 deficiencies are present, which
-                could impact bone health and energy levels, recommending
-                supplementation and dietary considerations.
+                {bloodReport ? <span dangerouslySetInnerHTML={{ __html: bloodReport }} /> : <CircularProgress />}
               </Typography>
             </Box>
           </Box>
