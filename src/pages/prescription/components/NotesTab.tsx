@@ -47,7 +47,7 @@ const NotesTab = (props: {
             label="Please enter your notes here"
             multiline
             rows={4}
-            sx={{ width: "90%" }}
+            sx={{ width: "95%" }}
           />
           <IconButton>
             <Mic />

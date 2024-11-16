@@ -1,4 +1,4 @@
-import { LocalHospital } from "@mui/icons-material";
+import { Close, LocalHospital } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Stack,
   Toolbar,
   Tooltip,
   Typography,
@@ -29,6 +30,10 @@ import NotesTab from "./components/NotesTab";
 import ChatGPTCard from "./components/ChatGPTCard";
 import TestHistoryCard from "./components/TestHistoryCard";
 import axios from "axios";
+import { Document, Page, pdfjs } from "react-pdf";
+import pdfFile from "../../assets/mock2.pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs`;
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -161,6 +166,12 @@ const PrescriptionV2 = () => {
     null
   );
   const [isTestModalOpen, setIsTestModalOpen] = React.useState(false);
+  const [numPages, setNumPages] = React.useState<number>();
+  const [pageNumber, setPageNumber] = React.useState<number>(1);
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveHistoryTab(newValue);
@@ -238,7 +249,15 @@ const PrescriptionV2 = () => {
           navigateToProfile={navigateToProfile}
         />
       </div>
-      <Box sx={{ width:"30%", backgroundColor: "#e8f5fe", marginTop:5, marginLeft: 1, padding: 1}}>
+      <Box
+        sx={{
+          width: "30%",
+          backgroundColor: "#e8f5fe",
+          marginTop: 5,
+          marginLeft: 1,
+          padding: 1,
+        }}
+      >
         <Grid2>
           <Grid2 size={6}>
             <Typography variant="h6">Hi, Dr. {doctor.firstName}</Typography>
@@ -276,13 +295,62 @@ const PrescriptionV2 = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 750,
+              height: 700,
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+              overflow: "auto",
+            }}
+          >
+            <Stack
+              direction="row"
+              useFlexGap
+              sx={{ flexWrap: "wrap", gap: 57 }}
+            >
+              <Typography variant="h6">Test History</Typography>
+              <IconButton onClick={handleCloseTestModal}>
+                <Close />
+              </IconButton>
+            </Stack>
+            <Document
+              file={pdfFile}
+              onLoadSuccess={onDocumentLoadSuccess}
+              className={
+                "h-screen overflow-y-auto flex justify-center  flex-1 "
+              }
+            >
+              <Page
+                className="pdf-page relative mx-20 z-0 "
+                pageNumber={1}
+                width={650}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+              />
+            </Document>
+
+            <Box sx={{marginTop: 2, outline: "1px solid #000", padding: 1}}>
+              <Typography variant="h5">Summary Insights</Typography>
+              <Typography>
+                The patient's lipid profile shows cholesterol and triglyceride
+                levels within borderline high limits, which may require
+                lifestyle adjustments to prevent cardiovascular risks. Fasting
+                blood sugar and HbA1c levels indicate poor glycemic control,
+                suggesting the need for dietary changes and diabetes management.
+                The complete blood count reveals a slightly elevated white blood
+                cell count, likely indicative of a recent infection or
+                inflammation. Vitamin D and B12 deficiencies are present, which
+                could impact bone health and energy levels, recommending
+                supplementation and dietary considerations.
+              </Typography>
+            </Box>
           </Box>
         </Modal>
       </div>
