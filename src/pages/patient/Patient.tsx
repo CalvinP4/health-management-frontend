@@ -40,6 +40,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { IHospital } from "../../types/Hospital";
 import {
@@ -48,7 +50,7 @@ import {
   Today,
   Vaccines,
 } from "@mui/icons-material";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -85,6 +87,28 @@ const HeaderSection = (props: {
     </section>
   );
 };
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
 
 const CarouselSection = () => {
   return (
@@ -132,13 +156,15 @@ const CarouselSection = () => {
   );
 };
 
-const AppointmentSection = (props: { patient: IPatient }) => {
+const AppointmentSection = (props: {
+  patient: IPatient;
+  value: number;
+  handleChange: (event: React.SyntheticEvent, newValue: number) => void;
+}) => {
   // State to store appointment data
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
-
-  console.log("Patient", props.patient);
 
   useEffect(() => {
     // Function to fetch appointment data from the backend
@@ -196,8 +222,74 @@ const AppointmentSection = (props: { patient: IPatient }) => {
 
   return (
     <section>
-      <Typography variant="h3">Upcoming Appointments</Typography>
-      <TableContainer component={Paper}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={props.value}
+          onChange={props.handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Upcoming Appointments" />
+          <Tab label="Past Appointments" />
+        </Tabs>
+      </Box>
+      <Box>
+        <CustomTabPanel value={props.value} index={0}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 450 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="h6">Doctor</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Hospital</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Date</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Time</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Type</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Reason</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {appointments.map((appointment) => {
+                  const startTime = new Date(appointment.startTime);
+                  const doctor = doctors.find(
+                    (doctor) => doctor.id === appointment.doctorId
+                  ) as IDoctor;
+                  const hospital = hospitals.find(
+                    (hospital) => hospital.id === appointment.hospitalId
+                  ) as IHospital;
+
+                  return (
+                    <TableRow
+                      key={appointment.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {doctor?.firstName + " " + doctor?.lastName}
+                      </TableCell>
+                      <TableCell>{hospital?.name}</TableCell>
+                      <TableCell>{startTime.toLocaleDateString()}</TableCell>
+                      <TableCell>{startTime.toLocaleTimeString()}</TableCell>
+                      <TableCell>{appointment.type}</TableCell>
+                      <TableCell>{appointment.reason}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CustomTabPanel>
+        <CustomTabPanel value={props.value} index={1}>
+        <TableContainer component={Paper}>
         <Table sx={{ minWidth: 450 }}>
           <TableHead>
             <TableRow>
@@ -215,9 +307,6 @@ const AppointmentSection = (props: { patient: IPatient }) => {
               </TableCell>
               <TableCell>
                 <Typography variant="h6">Type</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Reason</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -243,13 +332,14 @@ const AppointmentSection = (props: { patient: IPatient }) => {
                   <TableCell>{startTime.toLocaleDateString()}</TableCell>
                   <TableCell>{startTime.toLocaleTimeString()}</TableCell>
                   <TableCell>{appointment.type}</TableCell>
-                  <TableCell>{appointment.reason}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+        </CustomTabPanel>
+      </Box>
     </section>
   );
 };
@@ -298,6 +388,11 @@ const Patient = () => {
   const [hospital, setHospital] = useState<number>(0);
   const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
   const [open, setOpen] = React.useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
 
   const navigate = useNavigate();
 
@@ -376,9 +471,11 @@ const Patient = () => {
             }}
           >
             <Typography variant="h4">Book Appointment</Typography>
-            <IconButton onClick={() => {
+            <IconButton
+              onClick={() => {
                 setOpen(false);
-              }}>
+              }}
+            >
               <CloseOutlinedIcon />
             </IconButton>
           </Box>
@@ -422,7 +519,8 @@ const Patient = () => {
           </FormControl>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              label="Uncontrolled picker"
+              label="Date"
+              value={value}
               defaultValue={dayjs("2022-04-17")}
             />
           </LocalizationProvider>
@@ -446,7 +544,7 @@ const Patient = () => {
           </Box>
         </Box>
       </Modal>
-      <AppointmentSection patient={patient} />
+      <AppointmentSection patient={patient} value={activeTab} handleChange={handleChange} />
       <ButtonGridSection />
       <QuoteSection />
       <Footer />
