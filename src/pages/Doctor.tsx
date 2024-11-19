@@ -11,7 +11,16 @@ import {
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
 
-import { Button as ButtonMUI } from "@mui/material";
+import {
+  Box,
+  Button as ButtonMUI,
+  Typography,
+  Card as CardMUI,
+  CardHeader,
+  CardContent,
+  Grid2,
+  Avatar,
+} from "@mui/material";
 
 import Footer from "../components/Footer";
 import { IAppointment } from "../types/Appointments";
@@ -22,12 +31,44 @@ import { useNavigate } from "react-router-dom";
 import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 import { IProfile } from "../types/Profile";
-import { AccountBox, Schedule } from "@mui/icons-material";
+import {
+  AccountBox,
+  DeviceThermostat,
+  LocationCity,
+  LocationCityOutlined,
+  LocationCitySharp,
+  MedicalInformation,
+  Notes,
+  Place,
+  Schedule,
+} from "@mui/icons-material";
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
   patients: IPatient[];
   doctor: IDoctor;
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
 }
 
 const HeaderSection = (props: {
@@ -74,6 +115,67 @@ const HeaderSection = (props: {
   );
 };
 
+const UpcomingAppointmentsV2 = (props: IUpcomingAppointment) => {
+  const navigate = useNavigate();
+
+  return (
+    <section
+      style={{ marginTop: "4rem", marginBottom: "4rem", padding: "2rem" }}
+    >
+      <Typography variant="h4">Scheduled Appointments</Typography>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "2em",
+          paddingLeft: "35%",
+          paddingRight: "35%",
+        }}
+      >
+        {props.appointments.map((appointment: IAppointment, index: number) => {
+          const patient = props.patients.find(
+            (p: IPatient) => p.id === appointment.patientId
+          );
+
+          return (
+            <Card>
+              <Card.Body>
+                <Card.Title>
+                  {patient?.firstName + " " + patient?.lastName}
+                </Card.Title>
+                <Card.Text>
+                  <div>
+                    <div>
+                      Date:{" "}
+                      {new Date(appointment.startTime).toLocaleDateString()}
+                    </div>
+                    <div>
+                      <div>Symptoms: {appointment.symptoms}</div>
+                      <div>Type: {appointment.type}</div>
+                      <div>Reason: {appointment.reason}</div>
+                    </div>
+                  </div>
+                </Card.Text>
+                {/**TODO: pass the patient, appointment and doctor details */}
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    navigate("/prescription", {
+                      state: { appointment, patient, doctor: props.doctor },
+                    });
+                  }}
+                >
+                  Start
+                </Button>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
 const UpcomingAppointments = (props: IUpcomingAppointment) => {
   const navigate = useNavigate();
 
@@ -81,45 +183,66 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
     <section
       style={{ marginTop: "4rem", marginBottom: "4rem", padding: "2rem" }}
     >
-      <h1>Scheduled Appointments</h1>
-      {props.appointments.map((appointment: IAppointment, index: number) => {
-        const patient = props.patients.find(
-          (p: IPatient) => p.id === appointment.patientId
-        );
+      <Typography variant="h4">Scheduled Appointments</Typography>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "2em",
+          paddingLeft: "35%",
+          paddingRight: "35%",
+        }}
+      >
+        {props.appointments.map((appointment: IAppointment, index: number) => {
+          const patient = props.patients.find(
+            (p: IPatient) => p.id === appointment.patientId
+          );
 
-        return (
-          <Card style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>
-                {patient?.firstName + " " + patient?.lastName}
-              </Card.Title>
-              <Card.Text>
-                <div>
-                  <div>
-                    Date: {new Date(appointment.startTime).toLocaleDateString()}
-                  </div>
-                  <div>
-                    <div>Symptoms: {appointment.symptoms}</div>
-                    <div>Type: {appointment.type}</div>
-                    <div>Reason: {appointment.reason}</div>
-                  </div>
+          return (
+            <CardMUI>
+              <CardContent>
+                <div style={{ display: "flex", gap: "1em", marginBottom: "4px" }}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={require("../assets/trump.jpg")}
+                  />
+                  <Typography variant="h5">
+                    {patient?.firstName + " " + patient?.lastName}
+                  </Typography>
                 </div>
-              </Card.Text>
-              {/**TODO: pass the patient, appointment and doctor details */}
-              <Button
-                variant="primary"
-                onClick={() => {
-                  navigate("/prescription", {
-                    state: { appointment, patient, doctor: props.doctor },
-                  });
-                }}
-              >
-                Start
-              </Button>
-            </Card.Body>
-          </Card>
-        );
-      })}
+                <div style={{ display: "flex", gap: "1em" }}>
+                  <Place />
+                  {appointment.hospitalId}
+                </div>
+                <div style={{ display: "flex", gap: "1em" }}>
+                  <DeviceThermostat />
+                  {appointment.type}
+                </div>
+                <div style={{ display: "flex", gap: "1em" }}>
+                  <Notes />
+                  {appointment.reason}
+                </div>
+                <div style={{ display: "flex", gap: "1em" }}>
+                  <MedicalInformation />
+                  {appointment.symptoms}
+                </div>
+                <div style={{display: "flex", justifyContent: "center", marginTop: "4px"}}>
+                  <ButtonMUI
+                    variant="contained"
+                    onClick={() => {
+                      navigate("/prescription", {
+                        state: { appointment, patient, doctor: props.doctor },
+                      });
+                    }}
+                  >
+                    Start
+                  </ButtonMUI>
+                </div>
+              </CardContent>
+            </CardMUI>
+          );
+        })}
+      </div>
     </section>
   );
 };
@@ -140,14 +263,23 @@ const DoctorProfile = (props: { doctor: IDoctor }) => {
       </p>
       <div>
         <h3>Actions</h3>
-        <ButtonMUI variant="contained" onClick={() => {
+        <ButtonMUI
+          variant="contained"
+          onClick={() => {
             navigate("/doctor-schedule", { state: props.doctor });
-          }} startIcon={<Schedule />}>
+          }}
+          startIcon={<Schedule />}
+        >
           Schedule
         </ButtonMUI>
-        <ButtonMUI sx={{marginLeft: 2}} variant="contained" onClick={() => {
+        <ButtonMUI
+          sx={{ marginLeft: 2 }}
+          variant="contained"
+          onClick={() => {
             console.log("Update Profile");
-          }} startIcon={<AccountBox />}>
+          }}
+          startIcon={<AccountBox />}
+        >
           Profile
         </ButtonMUI>
       </div>

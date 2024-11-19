@@ -156,6 +156,7 @@ const CarouselSection = () => {
   );
 };
 
+
 const AppointmentSection = (props: {
   patient: IPatient;
   value: number;
@@ -386,13 +387,34 @@ const Patient = () => {
   const patient = location.state as IPatient;
 
   const [hospital, setHospital] = useState<number>(0);
+  const [doctor, setDoctor] = useState<number>(0);
+  const [type, setType] = useState<string>("");
   const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [reason, setReason] = useState("");
+  const [symptoms, setSymptoms] = useState("");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
+
+  const bookAppointment = async () => {
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment`, 
+    {
+      patientId: patient.id,
+      doctorId: doctor,
+      hospitalId: hospital,
+      startTime: "2022-04-17T12:00:00",
+      endTime: "2022-04-17T13:00:00",
+      type: "General",
+      reason: "Checkup",
+    });
+
+    if (response.status === 200) {
+      setOpen(false);
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -483,12 +505,14 @@ const Patient = () => {
             id="outlined-basic"
             label="Reason"
             variant="outlined"
+            value={reason}
             fullWidth
           />
           <TextField
             id="symptoms"
             label="Symptoms"
             variant="outlined"
+            value={symptoms}
             fullWidth
             multiline
             maxRows={4}
@@ -506,15 +530,27 @@ const Patient = () => {
             </Select>
           </FormControl>
           <FormControl>
+            <InputLabel>Type</InputLabel>
+            <Select
+              value={hospital}
+              onChange={(e) => setHospital(e.target.value as number)}
+              label="Type"
+            >
+              <MenuItem value={1}>Checkup</MenuItem>
+              <MenuItem value={2}>Emergency</MenuItem>
+              <MenuItem value={2}>Follow up</MenuItem>
+              <MenuItem value={2}>Consultatiion</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl>
             <InputLabel>Doctor</InputLabel>
             <Select
               value={hospital}
               onChange={(e) => setHospital(e.target.value as number)}
               label="Doctor"
             >
-              <MenuItem value={1}>General Hospital</MenuItem>
-              <MenuItem value={2}>Sacred Heart Hospial</MenuItem>
-              <MenuItem value={2}>Mecklenberg county Hospital</MenuItem>
+              <MenuItem value={1}>Joseph Dore</MenuItem>
+              <MenuItem value={2}>Aniket Shendre</MenuItem>
             </Select>
           </FormControl>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -532,7 +568,9 @@ const Patient = () => {
               gap: 2,
             }}
           >
-            <ButtonMUI variant="contained">Book</ButtonMUI>
+            <ButtonMUI variant="contained" onClick={() => {
+              bookAppointment();
+            }}>Book</ButtonMUI>
             <ButtonMUI
               variant="outlined"
               onClick={() => {
