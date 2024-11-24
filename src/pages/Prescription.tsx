@@ -37,7 +37,7 @@ const HeaderSection = (props: {doctor: IDoctor}) => {
                 style={{ borderRadius: "50%", width: "40px", height: "40px", padding: 0 }}
                 >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Log out</Dropdown.Item>
                 </DropdownButton>
             </Nav>
           </Navbar.Collapse>

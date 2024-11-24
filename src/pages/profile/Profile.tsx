@@ -46,7 +46,7 @@ const HeaderSection = (props: { firstName: string }) => {
                 }}
               >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Log out</Dropdown.Item>
               </DropdownButton>
             </Nav>
           </Navbar.Collapse>

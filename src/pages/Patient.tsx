@@ -50,7 +50,7 @@ const HeaderSection = (props: {
                 onSelect={props.onSelect}
               >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
+                <Dropdown.Item eventKey={1}>Log out</Dropdown.Item>
               </DropdownButton>
             </Nav>
           </Navbar.Collapse>
@@ -259,6 +259,9 @@ const Patient = () => {
           } as IProfile,
         },
       });
+    }
+    if (eventKey === "2"){
+      navigate("/")
     }
   };
 

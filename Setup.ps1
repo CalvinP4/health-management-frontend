@@ -1,6 +1,6 @@
 # Define MySQL credentials
 $mysqlUser = "root"
-$mysqlPassword = "admin"
+$mysqlPassword = "calvinp@123"
 $mysqlHost = "localhost"
 $databaseName = "healthdbtest"
 
@@ -178,7 +178,7 @@ INSERT INTO $databasename.tbl_hospital (
 INSERT INTO $databasename.tbl_hospital (
     id, name, county, state, street, beds_total, beds_available
 ) VALUES (
-    3, 'St. Mary's Hospital', 'Maricope', 'AZ', '789 Pine St', 150, 20
+    3, 'St. Mary Hospital', 'Maricope', 'AZ', '789 Pine St', 150, 20
 );
 
 INSERT INTO $databasename.tbl_hospital (
