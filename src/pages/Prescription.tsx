@@ -391,10 +391,12 @@ const Prescription = () => {
 
   console.log("state", location.state);
   
+  
 
   const [text, setText] = useState("");
   const [event, setEvent] = useState("");
 
+  
   return (
     <div>
       <HeaderSection doctor={doctor} />
