@@ -1,7 +1,7 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/home/Home';
-import Patient from './pages/Patient';
+import Patient from './pages/patient/Patient';
 import DoctorComponent from './pages/Doctor';
 import Register from './pages/register/RegisterV2';  
 import Appointments from './pages/Appointments'; 
