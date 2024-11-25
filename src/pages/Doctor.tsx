@@ -21,13 +21,12 @@ import {
   Grid2,
   Avatar,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { IAppointment } from "../types/Appointments";
 import { IPatient } from "../types/Patients";
 import { useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { IDoctor } from "../types/Doctors";
 import hospitalSvg from "../assets/hospital.png";
 import { IProfile } from "../types/Profile";
@@ -42,6 +41,7 @@ import {
   Place,
   Schedule,
 } from "@mui/icons-material";
+
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
@@ -105,7 +105,7 @@ const HeaderSection = (props: {
                 }}
               >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={2}>Sign out</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Log out</Dropdown.Item>
               </DropdownButton>
             </Nav>
           </Navbar.Collapse>
@@ -317,6 +317,9 @@ const DoctorComponent = () => {
         },
       });
     }
+    if (eventKey === "2"){
+      navigate("/")
+    }
   };
 
   useEffect(() => {
@@ -409,3 +412,4 @@ const styles = {
 };
 
 export default DoctorComponent;
+

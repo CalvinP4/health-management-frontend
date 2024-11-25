@@ -22,7 +22,7 @@ const Header = (props: any) => {
                     <Nav className="ms-auto">
                       <DropdownButton variant="Secondary" title={props.firstName[0]}>
                         <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                        <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
+                        <Dropdown.Item eventKey={1}>Log out</Dropdown.Item>
                       </DropdownButton>
                     </Nav>
                   </Navbar.Collapse>
