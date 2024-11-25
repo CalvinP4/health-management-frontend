@@ -78,7 +78,7 @@ const HeaderSection = (props: {
                 onSelect={props.onSelect}
               >
                 <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={1}>Sign out</Dropdown.Item>
+                <Dropdown.Item eventKey={2}>Log out</Dropdown.Item>
               </DropdownButton>
             </Nav>
           </Navbar.Collapse>
@@ -155,7 +155,6 @@ const CarouselSection = () => {
     </section>
   );
 };
-
 
 const AppointmentSection = (props: {
   patient: IPatient;
@@ -290,55 +289,55 @@ const AppointmentSection = (props: {
           </TableContainer>
         </CustomTabPanel>
         <CustomTabPanel value={props.value} index={1}>
-        <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 450 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h6">Doctor</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Hospital</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Date</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Time</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Type</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {appointments.map((appointment) => {
-              const startTime = new Date(appointment.startTime);
-              const doctor = doctors.find(
-                (doctor) => doctor.id === appointment.doctorId
-              ) as IDoctor;
-              const hospital = hospitals.find(
-                (hospital) => hospital.id === appointment.hospitalId
-              ) as IHospital;
-
-              return (
-                <TableRow
-                  key={appointment.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {doctor?.firstName + " " + doctor?.lastName}
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 450 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="h6">Doctor</Typography>
                   </TableCell>
-                  <TableCell>{hospital?.name}</TableCell>
-                  <TableCell>{startTime.toLocaleDateString()}</TableCell>
-                  <TableCell>{startTime.toLocaleTimeString()}</TableCell>
-                  <TableCell>{appointment.type}</TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Hospital</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Date</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Time</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6">Type</Typography>
+                  </TableCell>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {appointments.map((appointment) => {
+                  const startTime = new Date(appointment.startTime);
+                  const doctor = doctors.find(
+                    (doctor) => doctor.id === appointment.doctorId
+                  ) as IDoctor;
+                  const hospital = hospitals.find(
+                    (hospital) => hospital.id === appointment.hospitalId
+                  ) as IHospital;
+
+                  return (
+                    <TableRow
+                      key={appointment.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {doctor?.firstName + " " + doctor?.lastName}
+                      </TableCell>
+                      <TableCell>{hospital?.name}</TableCell>
+                      <TableCell>{startTime.toLocaleDateString()}</TableCell>
+                      <TableCell>{startTime.toLocaleTimeString()}</TableCell>
+                      <TableCell>{appointment.type}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </CustomTabPanel>
       </Box>
     </section>
@@ -386,8 +385,11 @@ const Patient = () => {
   const location = useLocation();
   const patient = location.state as IPatient;
 
+  const [hospitalList, setHospitalList] = useState<IHospital[]>([]);
+  const [doctorsList, setDoctorsList] = useState<IDoctor[]>([]);
   const [hospital, setHospital] = useState<number>(0);
   const [doctor, setDoctor] = useState<number>(0);
+  const [slot, setSlot] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
   const [open, setOpen] = React.useState(false);
@@ -400,34 +402,56 @@ const Patient = () => {
   };
 
   const bookAppointment = async () => {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment`, 
-    {
-      patientId: patient.id,
-      doctorId: doctor,
-      hospitalId: hospital,
-      startTime: "2022-04-17T12:00:00",
-      endTime: "2022-04-17T13:00:00",
-      type: "General",
-      reason: "Checkup",
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment`,
+      {
+        patientId: patient.id,
+        doctorId: doctor,
+        hospitalId: hospital,
+        startTime: "2022-04-17T12:00:00",
+        endTime: "2022-04-17T13:00:00",
+        type,
+        reason,
+        symptoms
+      }
+    );
 
     if (response.status === 200) {
       setOpen(false);
     }
-  }
+  };
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!patient) {
-      console.warn("Patient data not available, redirecting to home");
-      navigate("/home"); // Redirect to a safe page
+    const fetchHospitals = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/hospital`
+        );
+        setHospitalList(response.data);
+      } catch (error) {
+        console.error("Failed to fetch hospitals:", error);
+      }
+    };
+
+    fetchHospitals();
+  }, []);
+
+  const fetchDoctorsByHospital = async (hospitalId: number) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/doctor-hospital?hospitalId=${hospitalId}`
+      );
+      console.log("Doctors", response.data);
+
+      setDoctorsList(response.data as IDoctor[]);
+    } catch (error) {
+      console.error("Failed to fetch doctors:", error);
     }
-  }, [patient, navigate]);
+  };
 
   const onSelect = (eventKey: any) => {
-    console.log("On Select called");
-
     if (eventKey === "1") {
       navigate("/profile", {
         state: {
@@ -446,6 +470,9 @@ const Patient = () => {
           } as IProfile,
         },
       });
+      if (eventKey === "2") {
+        navigate("/");
+      }
     }
   };
 
@@ -506,6 +533,7 @@ const Patient = () => {
             label="Reason"
             variant="outlined"
             value={reason}
+            onChange={(e) => setReason(e.target.value)}
             fullWidth
           />
           <TextField
@@ -515,44 +543,61 @@ const Patient = () => {
             value={symptoms}
             fullWidth
             multiline
+            onChange={(e) => setSymptoms(e.target.value)}
             maxRows={4}
           />
           <FormControl>
             <InputLabel>Hospital</InputLabel>
             <Select
               value={hospital}
-              onChange={(e) => setHospital(e.target.value as number)}
+              onChange={(e) => {
+                setHospital(e.target.value as number);
+                fetchDoctorsByHospital(e.target.value as number);
+              }}
               label="Hospital"
             >
-              <MenuItem value={1}>General Hospital</MenuItem>
-              <MenuItem value={2}>Sacred Heart Hospial</MenuItem>
-              <MenuItem value={2}>Mecklenberg county Hospital</MenuItem>
+              {hospitalList.map((h) => (
+                <MenuItem value={h.id}>{h.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl>
             <InputLabel>Type</InputLabel>
             <Select
-              value={hospital}
-              onChange={(e) => setHospital(e.target.value as number)}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
               label="Type"
             >
-              <MenuItem value={1}>Checkup</MenuItem>
-              <MenuItem value={2}>Emergency</MenuItem>
-              <MenuItem value={2}>Follow up</MenuItem>
-              <MenuItem value={2}>Consultatiion</MenuItem>
+              <MenuItem value={"Checkup"}>Checkup</MenuItem>
+              <MenuItem value={"Emergency"}>Emergency</MenuItem>
+              <MenuItem value={"Follow up"}>Follow up</MenuItem>
+              <MenuItem value={"Consultation"}>Consultation</MenuItem>
             </Select>
           </FormControl>
           <FormControl>
             <InputLabel>Doctor</InputLabel>
             <Select
-              value={hospital}
-              onChange={(e) => setHospital(e.target.value as number)}
+              value={doctor}
+              onChange={(e) => setDoctor(e.target.value as number)}
               label="Doctor"
             >
-              <MenuItem value={1}>Joseph Dore</MenuItem>
-              <MenuItem value={2}>Aniket Shendre</MenuItem>
+              {doctorsList.map((d: IDoctor) => (
+                <MenuItem value={d.id}>
+                  {d.firstName + " " + d.lastName}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
+          {/* <FormControl>
+          <InputLabel>Slot</InputLabel>
+            <Select
+              value={doctor}
+              onChange={(e) => setSlot(e.target.value)}
+              label="Slot"
+            >
+
+            </Select>
+          </FormControl> */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date"
@@ -560,6 +605,7 @@ const Patient = () => {
               defaultValue={dayjs("2022-04-17")}
             />
           </LocalizationProvider>
+
           <Box
             sx={{
               display: "flex",
@@ -568,9 +614,14 @@ const Patient = () => {
               gap: 2,
             }}
           >
-            <ButtonMUI variant="contained" onClick={() => {
-              bookAppointment();
-            }}>Book</ButtonMUI>
+            <ButtonMUI
+              variant="contained"
+              onClick={() => {
+                bookAppointment();
+              }}
+            >
+              Book
+            </ButtonMUI>
             <ButtonMUI
               variant="outlined"
               onClick={() => {
@@ -582,7 +633,11 @@ const Patient = () => {
           </Box>
         </Box>
       </Modal>
-      <AppointmentSection patient={patient} value={activeTab} handleChange={handleChange} />
+      <AppointmentSection
+        patient={patient}
+        value={activeTab}
+        handleChange={handleChange}
+      />
       <ButtonGridSection />
       <QuoteSection />
       <Footer />
