@@ -325,8 +325,10 @@ const DoctorComponent = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
+        console.log("Fetching appointments for doctor:", doctor.id);
+        
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment?doctorId=${doctor.id}`
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment/doctor/${doctor.id}`
         );
 
         setAppointments(response.data);
