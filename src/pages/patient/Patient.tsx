@@ -452,6 +452,8 @@ const Patient = () => {
   };
 
   const onSelect = (eventKey: any) => {
+    console.log(eventKey);
+    
     if (eventKey === "1") {
       navigate("/profile", {
         state: {
@@ -470,9 +472,12 @@ const Patient = () => {
           } as IProfile,
         },
       });
-      if (eventKey === "2") {
-        navigate("/");
-      }
+    }
+
+    if (eventKey === "2") {
+      console.log("Log out"); 
+      
+      navigate("/");
     }
   };
 
