@@ -15,6 +15,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { IProfile } from "../../types/Profile";
 import axios from "axios";
 import { IPatient } from "../../types/Patients";
+import FormControl from '@mui/material/FormControl';
+import { Input, InputLabel, FormLabel, TextField} from '@mui/material';
 
 const HeaderSection = (props: { firstName: string }) => {
   return (
@@ -69,112 +71,66 @@ const FormComponent = (props: {
         props.onSubmit(e);
       }}
     >
-      <Form.Group>
-        <Form.Label htmlFor="firstName">First Name</Form.Label>
-        <Form.Control
-          id="firstName"
-          type="text"
-          name="firstName"
-          disabled
-          value={props.registerForm.firstName}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="middleName">Middle Name</Form.Label>
-        <Form.Control
-          type="text"
-          id="middleName"
-          name="middleName"
-          disabled
-          value={props.registerForm.middleName}
-          onChange={props.handleRegisterChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="lastName">Last Name</Form.Label>
-        <Form.Control
-          type="text"
-          id="lastName"
-          name="lastName"
-          disabled
-          value={props.registerForm.lastName}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="dob">DOB</Form.Label>
-        <Form.Control
-          type="date"
-          id="dob"
-          name="dob"
-          disabled
-          value={props.registerForm.dob}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="phoneNo">Phone</Form.Label>
-        <Form.Control
-          type="text"
-          id="phoneNo"
-          name="phoneNo"
-          value={props.registerForm.phoneNo}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="age">Age</Form.Label>
-        <Form.Control
-          type="number"
-          id="age"
-          name="age"
-          disabled
-          value={props.registerForm.age}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="address">Address</Form.Label>
-        <Form.Control
-          type="text"
-          id="address"
-          name="address"
-          value={props.registerForm.address}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="email">Email</Form.Label>
-        <Form.Control
-          type="email"
-          id="email"
-          name="email"
-          value={props.registerForm.email}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor="password">Password</Form.Label>
-        <Form.Control
-          type="password"
-          id="password"
-          name="password"
-          value={props.registerForm.password}
-          onChange={props.handleRegisterChange}
-          required
-        />
-      </Form.Group>
-      <Button
+
+
+    <FormControl>
+  <InputLabel htmlFor="firstName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>First Name</InputLabel>
+  <Input id="firstName" type="text" name="firstName" disabled onChange={props.handleRegisterChange}
+          required/>
+    </FormControl>
+<TextField > </TextField>
+    <FormControl>
+  <InputLabel htmlFor="middleName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Middle Name</InputLabel>
+  <Input id="middleName" type="text" name="middleName" disabled
+          onChange={props.handleRegisterChange}/>
+    </FormControl>
+    <TextField>  </TextField>
+    <FormControl>
+  <InputLabel htmlFor="lastName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Last Name</InputLabel>
+  <Input id="lastName" type="text" name="lastName" disabled
+          onChange={props.handleRegisterChange}  required/>
+    </FormControl>
+    <TextField>  </TextField>
+
+
+    <FormControl>
+  <InputLabel htmlFor="phoneNo" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Phone</InputLabel>
+  <Input id="phoneNo" type="text" name="phoneNo" disabled
+          onChange={props.handleRegisterChange}  required/>
+    </FormControl>
+    <TextField>  </TextField>
+    
+    <FormControl>
+  <InputLabel htmlFor="age" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Age</InputLabel>
+  <Input id="age" type="number" name="age" disabled
+          onChange={props.handleRegisterChange} required/>
+    </FormControl>
+    <TextField> </TextField>
+
+  <FormControl>
+  <InputLabel htmlFor="address" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Address</InputLabel>
+  <Input id="address" type="text" name="address" disabled
+          onChange={props.handleRegisterChange}  required/>
+    </FormControl>
+<TextField>  </TextField>
+
+    <FormControl>
+  <InputLabel htmlFor="email" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Email</InputLabel>
+  <Input id="email" type="email" name="email" disabled
+          onChange={props.handleRegisterChange}  required/>
+    </FormControl>
+    <TextField> </TextField>
+
+    <FormControl>
+  <InputLabel htmlFor="password" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Password</InputLabel>
+  <Input id="password" type="password" name="password" disabled
+          onChange={props.handleRegisterChange}  required/>
+    </FormControl>
+<TextField> </TextField>
+
+
+      <Button variant="primary"
         data-testid="profile-update-btn"
-        variant="primary"
         type="submit"
         style={{ width: "10%", marginTop: "16px", alignSelf: "center" }}
       >
