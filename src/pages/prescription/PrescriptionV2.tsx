@@ -31,6 +31,7 @@ import axios from "axios";
 import { pdfjs } from "react-pdf";
 import pdfFile from "../../assets/mock2.pdf";
 import ReportModal from "./components/ReportModal";
+import FooterV2 from "../../components/FooterV2";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs`;
 
@@ -313,7 +314,7 @@ const PrescriptionV2 = () => {
         />
       </div>
       <div>
-        <Footer />
+        <FooterV2 />
       </div>
     </div>
   );

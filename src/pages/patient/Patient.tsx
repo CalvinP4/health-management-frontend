@@ -11,7 +11,6 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/Footer";
 
 import wallpaper1 from "../../assets/wallpaper-1.jpg";
 import wallpaper2 from "../../assets/wallpaper-2.jpeg";
@@ -55,6 +54,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ISlot } from "../../types/Slot";
+import { HeaderProvider } from "../../context/HeaderContext";
+import HeaderV2 from "../../components/HeaderV2";
+import FooterV2 from "../../components/FooterV2";
 
 const HeaderSection = (props: {
   firstName: string;
@@ -382,6 +384,184 @@ const ButtonGridSection = () => {
   );
 };
 
+const BookAppointmentModal = (props: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  hospitalList: IHospital[];
+  doctorsList: IDoctor[];
+  hospital: number;
+  setHospital: (value: number) => void;
+  doctor: number;
+  setDoctor: (value: number) => void;
+  slot: number;
+  setSlot: (value: number) => void;
+  type: string;
+  setType: (value: string) => void;
+  value: Dayjs | null;
+  reason: string;
+  setReason: (value: string) => void;
+  symptoms: string;
+  setSymptoms: (value: string) => void;
+  fetchDoctorsByHospital: (hospitalId: number) => void;
+  fetchSlots: () => void;
+  slots: ISlot[];
+  bookAppointment: () => void;
+}) => {
+  return (
+    <Modal
+      open={props.open}
+      onClose={() => {
+        props.setOpen(false);
+      }}
+    >
+      <Box
+        component="form"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 600,
+          bgcolor: "background.paper",
+          border: "2px solid #000",
+          boxShadow: 24,
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4">Book Appointment</Typography>
+          <IconButton
+            onClick={() => {
+              props.setOpen(false);
+            }}
+          >
+            <CloseOutlinedIcon />
+          </IconButton>
+        </Box>
+        <TextField
+          id="outlined-basic"
+          label="Reason"
+          variant="outlined"
+          value={props.reason}
+          onChange={(e) => props.setReason(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          id="symptoms"
+          label="Symptoms"
+          variant="outlined"
+          value={props.symptoms}
+          fullWidth
+          multiline
+          onChange={(e) => props.setSymptoms(e.target.value)}
+          maxRows={4}
+        />
+        <FormControl>
+          <InputLabel>Hospital</InputLabel>
+          <Select
+            value={props.hospital}
+            onChange={(e) => {
+              props.setHospital(e.target.value as number);
+              props.fetchDoctorsByHospital(e.target.value as number);
+            }}
+            label="Hospital"
+          >
+            {props.hospitalList.map((h) => (
+              <MenuItem value={h.id}>{h.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Type</InputLabel>
+          <Select
+            value={props.type}
+            onChange={(e) => props.setType(e.target.value)}
+            label="Type"
+          >
+            <MenuItem value={"Checkup"}>Checkup</MenuItem>
+            <MenuItem value={"Emergency"}>Emergency</MenuItem>
+            <MenuItem value={"Follow up"}>Follow up</MenuItem>
+            <MenuItem value={"Consultation"}>Consultation</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Doctor</InputLabel>
+          <Select
+            value={props.doctor}
+            onChange={(e) => {
+              props.setDoctor(e.target.value as number);
+              props.fetchSlots();
+            }}
+            label="Doctor"
+          >
+            {props.doctorsList.map((d: IDoctor) => (
+              <MenuItem value={d.id}>{d.firstName + " " + d.lastName}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Slot</InputLabel>
+          <Select
+            value={props.slot}
+            onChange={(e) => props.setSlot(e.target.value as number)}
+            label="Slot"
+          >
+            {props.slots
+              .filter((s: ISlot) => s.apptStatus === 0)
+              .map((s: ISlot) => (
+                <MenuItem value={s.id}>
+                  {s.startTime + " - " + s.endTime}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Date"
+            value={props.value}
+            defaultValue={dayjs("2022-04-17")}
+          />
+        </LocalizationProvider>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
+          }}
+        >
+          <ButtonMUI
+            variant="contained"
+            onClick={() => {
+              props.bookAppointment();
+            }}
+          >
+            Book
+          </ButtonMUI>
+          <ButtonMUI
+            variant="outlined"
+            onClick={() => {
+              props.setOpen(false);
+            }}
+          >
+            Cancel
+          </ButtonMUI>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
+
 const Patient = () => {
   const location = useLocation();
   const patient = location.state as IPatient;
@@ -488,6 +668,30 @@ const Patient = () => {
     }
   };
 
+  const navigateToProfile = () => {
+    navigate("/profile", {
+      state: {
+        isPatient: true,
+        profile: {
+          id: patient.id,
+          firstName: patient.firstName,
+          middleName: patient.middleName,
+          lastName: patient.lastName,
+          dob: patient.dob.toString(),
+          phoneNo: patient.phoneNo,
+          address: patient.address,
+          age: patient.age,
+          email: patient.email,
+          password: patient.password,
+        } as IProfile,
+      },
+    });
+  }
+
+  const logout = () => { 
+    navigate("/");
+  }
+
   const onSelect = (eventKey: any) => {
     if (eventKey === "1") {
       navigate("/profile", {
@@ -515,178 +719,50 @@ const Patient = () => {
 
   return (
     <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
-      <HeaderSection firstName={patient.firstName} onSelect={onSelect} />
-      <CarouselSection />
-      <section style={{ margin: "2em" }}>
-        <ButtonMUI
-          startIcon={<Vaccines />}
-          onClick={() => setOpen(true)}
-          variant="contained"
-        >
-          Book Appointment
-        </ButtonMUI>
-      </section>
-      <Modal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Box
-          component="form"
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 600,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+      <HeaderProvider>
+        <HeaderV2 navigateToProfile={navigateToProfile} logout={logout} />
+        <CarouselSection />
+        <section style={{ margin: "2em" }}>
+          <ButtonMUI
+            startIcon={<Vaccines />}
+            onClick={() => setOpen(true)}
+            variant="contained"
           >
-            <Typography variant="h4">Book Appointment</Typography>
-            <IconButton
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseOutlinedIcon />
-            </IconButton>
-          </Box>
-          <TextField
-            id="outlined-basic"
-            label="Reason"
-            variant="outlined"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            fullWidth
-          />
-          <TextField
-            id="symptoms"
-            label="Symptoms"
-            variant="outlined"
-            value={symptoms}
-            fullWidth
-            multiline
-            onChange={(e) => setSymptoms(e.target.value)}
-            maxRows={4}
-          />
-          <FormControl>
-            <InputLabel>Hospital</InputLabel>
-            <Select
-              value={hospital}
-              onChange={(e) => {
-                setHospital(e.target.value as number);
-                fetchDoctorsByHospital(e.target.value as number);
-              }}
-              label="Hospital"
-            >
-              {hospitalList.map((h) => (
-                <MenuItem value={h.id}>{h.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl>
-            <InputLabel>Type</InputLabel>
-            <Select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              label="Type"
-            >
-              <MenuItem value={"Checkup"}>Checkup</MenuItem>
-              <MenuItem value={"Emergency"}>Emergency</MenuItem>
-              <MenuItem value={"Follow up"}>Follow up</MenuItem>
-              <MenuItem value={"Consultation"}>Consultation</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl>
-            <InputLabel>Doctor</InputLabel>
-            <Select
-              value={doctor}
-              onChange={(e) => {
-                setDoctor(e.target.value as number);
-                fetchSlots();
-              }}
-              label="Doctor"
-            >
-              {doctorsList.map((d: IDoctor) => (
-                <MenuItem value={d.id}>
-                  {d.firstName + " " + d.lastName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl>
-            <InputLabel>Slot</InputLabel>
-            <Select
-              value={slot}
-              onChange={(e) => setSlot(e.target.value as number)}
-              label="Slot"
-            >
-              {slots
-                .filter((s: ISlot) => s.apptStatus === 0)
-                .map((s: ISlot) => (
-                  <MenuItem value={s.id}>
-                    {s.startTime + " - " + s.endTime}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Date"
-              value={value}
-              defaultValue={dayjs("2022-04-17")}
-            />
-          </LocalizationProvider>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 2,
-            }}
-          >
-            <ButtonMUI
-              variant="contained"
-              onClick={() => {
-                bookAppointment();
-              }}
-            >
-              Book
-            </ButtonMUI>
-            <ButtonMUI
-              variant="outlined"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              Cancel
-            </ButtonMUI>
-          </Box>
-        </Box>
-      </Modal>
-      <AppointmentSection
-        patient={patient}
-        value={activeTab}
-        handleChange={handleChange}
-      />
-      <ButtonGridSection />
-      <QuoteSection />
-      <Footer />
+            Book Appointment
+          </ButtonMUI>
+        </section>
+        <BookAppointmentModal
+          open={open}
+          setOpen={setOpen}
+          hospitalList={hospitalList}
+          doctorsList={doctorsList}
+          hospital={hospital}
+          setHospital={setHospital}
+          doctor={doctor}
+          setDoctor={setDoctor}
+          slot={slot}
+          setSlot={setSlot}
+          type={type}
+          setType={setType}
+          value={value}
+          reason={reason}
+          setReason={setReason}
+          symptoms={symptoms}
+          setSymptoms={setSymptoms}
+          fetchDoctorsByHospital={fetchDoctorsByHospital}
+          fetchSlots={fetchSlots}
+          slots={slots}
+          bookAppointment={bookAppointment}
+        />
+        <AppointmentSection
+          patient={patient}
+          value={activeTab}
+          handleChange={handleChange}
+        />
+        <ButtonGridSection />
+        <QuoteSection />
+        <FooterV2 />
+      </HeaderProvider>
     </div>
   );
 };
