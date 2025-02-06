@@ -54,6 +54,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ISlot } from "../../types/Slot";
 
 const HeaderSection = (props: {
   firstName: string;
@@ -389,16 +390,31 @@ const Patient = () => {
   const [doctorsList, setDoctorsList] = useState<IDoctor[]>([]);
   const [hospital, setHospital] = useState<number>(0);
   const [doctor, setDoctor] = useState<number>(0);
-  const [slot, setSlot] = useState<string>("");
+  const [slot, setSlot] = useState<number>(-1);
   const [type, setType] = useState<string>("");
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs());
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [reason, setReason] = useState("");
   const [symptoms, setSymptoms] = useState("");
+  const [slots, setSlots] = useState<ISlot[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
+  };
+
+  const fetchSlots = async () => {
+    try {
+      const response = await axios.get(
+        `${
+          process.env.REACT_APP_BACKEND_SERVER_URL
+        }/slot/doctor/${doctor}/date/${value?.format("YYYY-MM-DD") ?? ""}`
+      );
+
+      setSlots(response.data);
+    } catch (error) {
+      console.error("Failed to fetch slots:", error);
+    }
   };
 
   const bookAppointment = async () => {
@@ -408,16 +424,32 @@ const Patient = () => {
         patientId: patient.id,
         doctorId: doctor,
         hospitalId: hospital,
-        startTime: "2022-04-17T12:00:00",
-        endTime: "2022-04-17T13:00:00",
+        startTime: `${value?.format("YYYY-MM-DD")}T${
+          slots.find((s) => s.id === slot)?.startTime
+        }`,
+        endTime: `${value?.format("YYYY-MM-DD")}T${
+          slots.find((s) => s.id === slot)?.endTime
+        }`,
         type,
         reason,
-        symptoms
+        symptoms,
       }
     );
 
     if (response.status === 200) {
-      setOpen(false);
+      const slotToBook = slots.find((s) => s.id === slot);
+      if (slotToBook) {
+        slotToBook.apptStatus = 1;
+      }
+
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/slot`,
+        slotToBook
+      );
+
+      if (response.status === 200) {
+        setOpen(false);
+      }
     }
   };
 
@@ -438,6 +470,12 @@ const Patient = () => {
     fetchHospitals();
   }, []);
 
+  useEffect(() => {
+    if (doctor !== 0) {
+      fetchSlots();
+    }
+  }, [doctor, value]);
+
   const fetchDoctorsByHospital = async (hospitalId: number) => {
     try {
       const response = await axios.get(
@@ -450,7 +488,7 @@ const Patient = () => {
     }
   };
 
-  const onSelect = (eventKey: any) => {    
+  const onSelect = (eventKey: any) => {
     if (eventKey === "1") {
       navigate("/profile", {
         state: {
@@ -470,7 +508,7 @@ const Patient = () => {
         },
       });
     }
-    if (eventKey === "2") {      
+    if (eventKey === "2") {
       navigate("/");
     }
   };
@@ -577,7 +615,10 @@ const Patient = () => {
             <InputLabel>Doctor</InputLabel>
             <Select
               value={doctor}
-              onChange={(e) => setDoctor(e.target.value as number)}
+              onChange={(e) => {
+                setDoctor(e.target.value as number);
+                fetchSlots();
+              }}
               label="Doctor"
             >
               {doctorsList.map((d: IDoctor) => (
@@ -585,6 +626,22 @@ const Patient = () => {
                   {d.firstName + " " + d.lastName}
                 </MenuItem>
               ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel>Slot</InputLabel>
+            <Select
+              value={slot}
+              onChange={(e) => setSlot(e.target.value as number)}
+              label="Slot"
+            >
+              {slots
+                .filter((s: ISlot) => s.apptStatus === 0)
+                .map((s: ISlot) => (
+                  <MenuItem value={s.id}>
+                    {s.startTime + " - " + s.endTime}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
