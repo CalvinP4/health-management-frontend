@@ -1,7 +1,18 @@
-import React from 'react';
+import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -57,12 +68,11 @@ const Home = () => {
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor`
         );
 
-
         response.data.forEach((doctor: any) => {
           if (
             doctor.email === loginForm.email &&
             doctor.password === loginForm.password
-          ) {            
+          ) {
             navigate("/doctor", { state: doctor });
           }
         });
@@ -81,8 +91,8 @@ const Home = () => {
   };
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         fontFamily: "Arial, sans-serif",
         backgroundImage: `url(${process.env.PUBLIC_URL}/home.png)`,
         backgroundSize: "cover",
@@ -91,11 +101,12 @@ const Home = () => {
         flexDirection: "column",
         alignItems: "center",
         paddingTop: "0.5in",
-        minHeight: "calc(100vh - 0.5in)", // Adjusting height to start from 0.5 inch below the top
+        minHeight: "calc(100vh - 0.5in)",
       }}
     >
-      <h2
-        style={{
+      <Typography
+        variant="h4"
+        sx={{
           marginBottom: "20px",
           textAlign: "left",
           marginLeft: "20px",
@@ -104,9 +115,11 @@ const Home = () => {
       >
         Welcome to Our Hospital System - MEDTECH - Making HealthCare Better
         Together
-      </h2>
-      <div
-        style={{
+      </Typography>
+
+      <Paper
+        elevation={3}
+        sx={{
           maxWidth: "400px",
           marginTop: "110px",
           width: "100%",
@@ -117,74 +130,86 @@ const Home = () => {
         }}
       >
         <form onSubmit={handleLoginSubmit}>
-          <h3 style={{ fontWeight: "bold" }}>Login</h3>
-          <label htmlFor="userType" style={{ marginBottom: "10px" }}>
-            I am a :{" "}
-          </label>
-          <select
-            data-testid="userType"
-            id="userType"
-            name="userType"
-            value={registerForm.userType}
-            onChange={handleRegisterChange}
-            required
+          <Typography
+            variant="h5"
+            component="h3"
+            sx={{ fontWeight: "bold", marginBottom: "16px" }}
           >
-            {/* <option value="">Select User Type</option> */}
-            <option value="patient">Patient</option>
-            <option value="doctor">Doctor</option>
-          </select>
-          <label htmlFor="email" style={{ display: "block" }}>
-            Email:
-          </label>
-          <input
-            type="text"
-            data-testid="email"
+            Login
+          </Typography>
+          <FormControl fullWidth sx={{ marginBottom: "16px" }}>
+            <InputLabel htmlFor="userType">I am a :</InputLabel>
+            <Select
+              label="I am a :"
+              value={registerForm.userType}
+              onChange={handleRegisterChange}
+              inputProps={{
+                name: "userType",
+                id: "userType",
+              }}
+            >
+              <MenuItem value="patient">Patient</MenuItem>
+              <MenuItem value="doctor">Doctor</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
             id="email"
+            label="Email"
             name="email"
+            variant="filled"
             value={loginForm.email}
             onChange={handleLoginChange}
             required
-            style={{ width: "100%" }}
+            fullWidth
+            sx={{ marginBottom: "16px" }}
           />
-          <label htmlFor="password" style={{ display: "block" }}>
-            Password:
-          </label>
-          <input
-            type="password"
-            data-testid="password"
+          <TextField
             id="password"
+            label="Password"
             name="password"
+            variant="filled"
             value={loginForm.password}
             onChange={handleLoginChange}
             required
-            style={{ width: "100%" }}
+            type="password"
+            fullWidth
+            sx={{ marginBottom: "16px" }}
           />
-          <input
-            data-testid="login-btn"
+          <Button
             type="submit"
-            value="Login"
-            style={{
-              width: "100%",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              padding: "14px 20px",
-              margin: "8px 0",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          />
+            variant="contained"
+            fullWidth
+            sx={{ marginTop: "20px" }}
+          >
+            Login
+          </Button>
         </form>
-        <div
-          style={{ textAlign: "center", marginTop: "10px", fontWeight: "bold" }}
+        <Box
+          sx={{
+            textAlign: "center",
+            marginTop: "10px",
+            fontWeight: "bold",
+          }}
         >
-          <Link data-testid="register-link" to="/register" style={{ color: "#4CAF50" }}>
-            New User? Register Here
-          </Link>
-        </div>
-      </div>
-      <div
-        style={{
+          <Box
+            sx={{
+              color: "#4CAF50",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            <Link data-testid="register-link" to="/register">
+              New User? Register Here
+            </Link>
+          </Box>
+        </Box>
+      </Paper>
+
+      <Typography
+        variant="body2"
+        sx={{
           marginTop: "auto",
           fontWeight: "bold",
           marginBottom: "0px",
@@ -194,8 +219,8 @@ const Home = () => {
         }}
       >
         Copyright © {new Date().getFullYear()} MedTech. All rights reserved.
-      </div>
-    </div>
+      </Typography>
+    </Box>
   );
 };
 
