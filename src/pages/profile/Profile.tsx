@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Navbar,
   Container,
@@ -15,8 +15,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { IProfile } from "../../types/Profile";
 import axios from "axios";
 import { IPatient } from "../../types/Patients";
-import FormControl from '@mui/material/FormControl';
-import { Input, InputLabel, FormLabel, TextField} from '@mui/material';
+import FormControl from "@mui/material/FormControl";
+import { Input, InputLabel, FormLabel, TextField } from "@mui/material";
 
 const HeaderSection = (props: { firstName: string }) => {
   return (
@@ -66,77 +66,128 @@ const FormComponent = (props: {
 }) => {
   return (
     <Form
-      style={{ display: "flex", flexDirection: "column" }}
-      onSubmit={(e) => {
-        props.onSubmit(e);
-      }}
+    style={{ display: "flex", flexDirection: "column" }}
+    onSubmit={(e) => {
+      props.onSubmit(e);
+    }}
+  >
+    <FormControl>
+      <TextField
+        id="firstName"
+        label="First Name"
+        type="text"
+        name="firstName"
+        value={props.registerForm.firstName}
+        disabled
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="middleName"
+        label="Middle Name"
+        type="text"
+        name="middleName"
+        value={props.registerForm.middleName}
+        disabled
+        onChange={props.handleRegisterChange}
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="lastName"
+        label="Last Name"
+        type="text"
+        name="lastName"
+        value={props.registerForm.lastName}
+        disabled
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="phoneNo"
+        label="Phone"
+        type="text"
+        name="phoneNo"
+        value={props.registerForm.phoneNo}
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="age"
+        label="Age"
+        type="number"
+        name="age"
+        value={props.registerForm.age}
+        disabled
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="address"
+        label="Address"
+        type="text"
+        name="address"
+        value={props.registerForm.address}
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="email"
+        label="Email"
+        type="email"
+        name="email"
+        value={props.registerForm.email}
+        disabled
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <FormControl>
+      <TextField
+        id="password"
+        label="Password"
+        type="password"
+        name="password"
+        value={props.registerForm.password}
+        onChange={props.handleRegisterChange}
+        required
+        variant="outlined"
+        margin="normal"
+      />
+    </FormControl>
+    <Button
+      color="primary"
+      data-testid="profile-update-btn"
+      type="submit"
+      style={{ width: "10%", marginTop: "16px", alignSelf: "center" }}
     >
-
-
-    <FormControl>
-  <InputLabel htmlFor="firstName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>First Name</InputLabel>
-  <Input id="firstName" type="text" name="firstName" disabled onChange={props.handleRegisterChange}
-          required/>
-    </FormControl>
-<TextField > </TextField>
-    <FormControl>
-  <InputLabel htmlFor="middleName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Middle Name</InputLabel>
-  <Input id="middleName" type="text" name="middleName" disabled
-          onChange={props.handleRegisterChange}/>
-    </FormControl>
-    <TextField>  </TextField>
-    <FormControl>
-  <InputLabel htmlFor="lastName" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Last Name</InputLabel>
-  <Input id="lastName" type="text" name="lastName" disabled
-          onChange={props.handleRegisterChange}  required/>
-    </FormControl>
-    <TextField>  </TextField>
-
-
-    <FormControl>
-  <InputLabel htmlFor="phoneNo" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Phone</InputLabel>
-  <Input id="phoneNo" type="text" name="phoneNo" disabled
-          onChange={props.handleRegisterChange}  required/>
-    </FormControl>
-    <TextField>  </TextField>
-    
-    <FormControl>
-  <InputLabel htmlFor="age" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Age</InputLabel>
-  <Input id="age" type="number" name="age" disabled
-          onChange={props.handleRegisterChange} required/>
-    </FormControl>
-    <TextField> </TextField>
-
-  <FormControl>
-  <InputLabel htmlFor="address" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Address</InputLabel>
-  <Input id="address" type="text" name="address" disabled
-          onChange={props.handleRegisterChange}  required/>
-    </FormControl>
-<TextField>  </TextField>
-
-    <FormControl>
-  <InputLabel htmlFor="email" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Email</InputLabel>
-  <Input id="email" type="email" name="email" disabled
-          onChange={props.handleRegisterChange}  required/>
-    </FormControl>
-    <TextField> </TextField>
-
-    <FormControl>
-  <InputLabel htmlFor="password" style={{ marginLeft: "-11px", fontWeight: "bold", fontSize: "20px" }}>Password</InputLabel>
-  <Input id="password" type="password" name="password" disabled
-          onChange={props.handleRegisterChange}  required/>
-    </FormControl>
-<TextField> </TextField>
-
-
-      <Button variant="primary"
-        data-testid="profile-update-btn"
-        type="submit"
-        style={{ width: "10%", marginTop: "16px", alignSelf: "center" }}
-      >
-        Update
-      </Button>
-    </Form>
+      Update
+    </Button>
+  </Form>
   );
 };
 
@@ -144,10 +195,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isPatient] = useState<boolean>(
-    location.state?.isPatient ?? false
-  );
-  
+  const [isPatient] = useState<boolean>(location.state?.isPatient ?? false);
+
   const [profile, setProfile] = useState<IProfile>(
     location.state?.profile ?? {
       id: 0,
@@ -162,6 +211,8 @@ const Profile = () => {
       email: "",
     }
   );
+
+  console.log("Profile state:", profile);
 
   const updateProfile = async (event: React.FormEvent) => {
     event.preventDefault();

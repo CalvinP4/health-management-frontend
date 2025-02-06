@@ -443,7 +443,6 @@ const Patient = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/doctor-hospital?hospitalId=${hospitalId}`
       );
-      console.log("Doctors", response.data);
 
       setDoctorsList(response.data as IDoctor[]);
     } catch (error) {
@@ -451,9 +450,7 @@ const Patient = () => {
     }
   };
 
-  const onSelect = (eventKey: any) => {
-    console.log(eventKey);
-    
+  const onSelect = (eventKey: any) => {    
     if (eventKey === "1") {
       navigate("/profile", {
         state: {
@@ -473,10 +470,7 @@ const Patient = () => {
         },
       });
     }
-
-    if (eventKey === "2") {
-      console.log("Log out"); 
-      
+    if (eventKey === "2") {      
       navigate("/");
     }
   };
@@ -593,16 +587,6 @@ const Patient = () => {
               ))}
             </Select>
           </FormControl>
-          {/* <FormControl>
-          <InputLabel>Slot</InputLabel>
-            <Select
-              value={doctor}
-              onChange={(e) => setSlot(e.target.value)}
-              label="Slot"
-            >
-
-            </Select>
-          </FormControl> */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Date"
