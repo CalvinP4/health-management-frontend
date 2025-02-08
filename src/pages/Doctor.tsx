@@ -41,7 +41,9 @@ import {
   Place,
   Schedule,
 } from "@mui/icons-material";
-
+import { HeaderProvider } from "../context/HeaderContext";
+import HeaderV2 from "../components/HeaderV2";
+import FooterV2 from "../components/FooterV2";
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
@@ -201,7 +203,9 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
           return (
             <CardMUI>
               <CardContent>
-                <div style={{ display: "flex", gap: "1em", marginBottom: "4px" }}>
+                <div
+                  style={{ display: "flex", gap: "1em", marginBottom: "4px" }}
+                >
                   <Avatar
                     alt="Remy Sharp"
                     src={require("../assets/trump.jpg")}
@@ -226,7 +230,13 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
                   <MedicalInformation />
                   {appointment.symptoms}
                 </div>
-                <div style={{display: "flex", justifyContent: "center", marginTop: "4px"}}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "4px",
+                  }}
+                >
                   <ButtonMUI
                     variant="contained"
                     onClick={() => {
@@ -295,6 +305,27 @@ const DoctorComponent = () => {
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [patients, setPatients] = useState<IPatient[]>([]);
 
+
+  const navigateToProfile = () => {
+    navigate("/profile", {
+      state: {
+        isPatient: false,
+        profile: {
+          id: doctor.id,
+          firstName: doctor.firstName,
+          middleName: doctor.middleName,
+          lastName: doctor.lastName,
+          dob: doctor.dob.toString(),
+          phoneNo: doctor.phoneNo,
+          address: doctor.address,
+          age: doctor.age,
+          email: doctor.email,
+          password: doctor.password,
+        } as IProfile,
+      },
+    });
+  }
+
   const onSelect = (eventKey: any) => {
     console.log("On Select called");
 
@@ -317,8 +348,8 @@ const DoctorComponent = () => {
         },
       });
     }
-    if (eventKey === "2"){
-      navigate("/")
+    if (eventKey === "2") {
+      navigate("/");
     }
   };
 
@@ -326,7 +357,7 @@ const DoctorComponent = () => {
     const fetchAppointments = async () => {
       try {
         console.log("Fetching appointments for doctor:", doctor.id);
-        
+
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment/doctor/${doctor.id}`
         );
@@ -352,16 +383,22 @@ const DoctorComponent = () => {
     fetchPatients();
   }, []);
 
+  const logout = () => { 
+    navigate("/");
+  }
+
   return (
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
-      <HeaderSection doctor={doctor} onSelect={onSelect} />
-      <DoctorProfile doctor={doctor} />
-      <UpcomingAppointments
-        appointments={appointments}
-        patients={patients}
-        doctor={doctor}
-      />
-      <Footer />
+      <HeaderProvider>
+        <HeaderV2 navigateToProfile={navigateToProfile} logout={logout}/>
+        <DoctorProfile doctor={doctor} />
+        <UpcomingAppointments
+          appointments={appointments}
+          patients={patients}
+          doctor={doctor}
+        />
+        <FooterV2 />
+      </HeaderProvider>
     </div>
   );
 };
@@ -407,11 +444,10 @@ const styles = {
   },
   profileSection: {
     padding: "20px",
-    backgroundColor: "#c8f9fa",
+    backgroundColor: "#d1d1d1",
     display: "flex",
     justifyContent: "space-between",
   },
 };
 
 export default DoctorComponent;
-
