@@ -2,12 +2,11 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/home/Home';
 import Patient from './pages/patient/Patient';
-import DoctorComponent from './pages/Doctor';
+import DoctorComponent from './pages/doctor/Doctor';
 import Register from './pages/register/RegisterV2';  
-import Appointments from './pages/Appointments'; 
-import DoctorScheduleV2 from './pages/DoctorScheduleV2';
-import PatientSchedule from './pages/PatientSchedule';
-import Prescription from './pages/Prescription';
+import Appointments from './pages/appointment/Appointments'; 
+import DoctorScheduleV2 from './pages/doctorschedule/DoctorScheduleV2';
+import PatientSchedule from './pages/patientschedule/PatientSchedule';
 import Profile from './pages/profile/Profile';
 import PrescriptionV2 from './pages/prescription/PrescriptionV2';
 

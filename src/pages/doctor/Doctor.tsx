@@ -10,40 +10,33 @@ import {
 } from "react-bootstrap";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useLocation } from "react-router-dom";
-
 import {
   Box,
   Button as ButtonMUI,
   Typography,
   Card as CardMUI,
-  CardHeader,
   CardContent,
-  Grid2,
   Avatar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
-import { IAppointment } from "../types/Appointments";
-import { IPatient } from "../types/Patients";
+import { IAppointment } from "../../types/Appointments";
+import { IPatient } from "../../types/Patients";
 import { useEffect } from "react";
 import axios from "axios";
-import { IDoctor } from "../types/Doctors";
-import hospitalSvg from "../assets/hospital.png";
-import { IProfile } from "../types/Profile";
+import { IDoctor } from "../../types/Doctors";
+import hospitalSvg from "../../assets/hospital.png";
+import { IProfile } from "../../types/Profile";
 import {
   AccountBox,
   DeviceThermostat,
-  LocationCity,
-  LocationCityOutlined,
-  LocationCitySharp,
   MedicalInformation,
   Notes,
   Place,
   Schedule,
 } from "@mui/icons-material";
-import { HeaderProvider } from "../context/HeaderContext";
-import HeaderV2 from "../components/HeaderV2";
-import FooterV2 from "../components/FooterV2";
+import { HeaderProvider } from "../../context/HeaderContext";
+import HeaderV2 from "../../components/HeaderV2";
+import FooterV2 from "../../components/FooterV2";
 
 interface IUpcomingAppointment {
   appointments: IAppointment[];
@@ -208,7 +201,7 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
                 >
                   <Avatar
                     alt="Remy Sharp"
-                    src={require("../assets/trump.jpg")}
+                    src={require("../../assets/trump.jpg")}
                   />
                   <Typography variant="h5">
                     {patient?.firstName + " " + patient?.lastName}

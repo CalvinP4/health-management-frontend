@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // or 'react-router-dom' for rea
 
 // Import Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IAppointment } from "../types/Appointments";
+import { IAppointment } from "../../types/Appointments";
 import axios from "axios";
 
 
