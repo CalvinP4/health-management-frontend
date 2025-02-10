@@ -1,10 +1,5 @@
 import React from "react";
 import {
-  Navbar,
-  Container,
-  Nav,
-  DropdownButton,
-  Dropdown,
   Form,
   Button,
 } from "react-bootstrap";
@@ -20,45 +15,6 @@ import { HeaderProvider } from "../../context/HeaderContext";
 import HeaderV2 from "../../components/HeaderV2";
 import FooterV2 from "../../components/FooterV2";
 
-const HeaderSection = (props: { firstName: string }) => {
-  return (
-    <section>
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container>
-          <img
-            src={hospitalSvg}
-            alt="Doctor"
-            style={{ marginLeft: "10px", height: "40px", width: "auto" }}
-          />
-          <Navbar.Brand
-            style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "20px" }}
-          >
-            {" "}
-            MediTech HealthCare
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
-              <DropdownButton
-                variant="Secondary"
-                title={props.firstName[0]}
-                style={{
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  padding: 0,
-                }}
-              >
-                <Dropdown.Item eventKey={1}>Profile</Dropdown.Item>
-                <Dropdown.Item eventKey={2}>Log out</Dropdown.Item>
-              </DropdownButton>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </section>
-  );
-};
 
 const FormComponent = (props: {
   registerForm: IProfile;
