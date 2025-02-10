@@ -9,7 +9,6 @@ import {
   Button,
 } from "react-bootstrap";
 import hospitalSvg from "../../assets/hospital.png";
-import Footer from "../../components/Footer";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IProfile } from "../../types/Profile";
