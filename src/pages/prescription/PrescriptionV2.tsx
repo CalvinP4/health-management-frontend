@@ -88,70 +88,6 @@ const Header = (props: {
   );
 };
 
-const Footer = () => {
-  return (
-    <footer>
-      <Box sx={{ backgroundColor: "#e9e9e9", padding: "1em" }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
-              <Typography variant="h5">About Us</Typography>
-              <Typography>
-                Making Healthcare Better Together - MediTech Crushers
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <Typography variant="h5">Quick Links</Typography>
-              <ul>
-                <li>
-                  <Link href="#">Services</Link>
-                </li>
-                <li>
-                  <Link href="#">About Us</Link>
-                </li>
-                <li>
-                  <Link href="#">Connect with us</Link>
-                </li>
-              </ul>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <Typography variant="h5">Contact Us</Typography>
-              <Typography>123 Main Street, Anytown, USA</Typography>
-              <Typography>Email: info@meditech.com</Typography>
-              <Typography>Phone: (123) 456-7890</Typography>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <Typography variant="h5">Follow Us</Typography>
-              <ul>
-                <li>
-                  <Link href="#">
-                    Facebook<i className="fab fa-facebook"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#">
-                    Twitter<i className="fab fa-twitter"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#">
-                    Instagram<i className="fab fa-instagram"></i>
-                  </Link>
-                </li>
-              </ul>
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="center" sx={{ mt: 3 }}>
-            <Typography variant="body2" color="textSecondary" align="center">
-              Copyright &copy; 2024 MediTech solutions
-            </Typography>
-          </Grid>
-        </Container>
-      </Box>
-    </footer>
-  );
-};
-
 const PrescriptionV2 = () => {
   const [activeHistoryTab, setActiveHistoryTab] = React.useState(0);
   const [activeNotesTab, setActiveNotesTab] = React.useState(0);
@@ -161,13 +97,14 @@ const PrescriptionV2 = () => {
   );
   const [isTestModalOpen, setIsTestModalOpen] = React.useState(false);
   const [bloodReport, setBloodReport] = React.useState("");
-  
+  const [notes, setNotes] = React.useState("");
+
   const [numPages, setNumPages] = React.useState<number>();
   const [pageNumber, setPageNumber] = React.useState<number>(1);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
-  }
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveHistoryTab(newValue);
@@ -193,7 +130,6 @@ const PrescriptionV2 = () => {
     const blob = await fetch(pdfFile).then((r) => r.blob());
     formData.append("pdf", blob, "mock2.pdf");
     console.log(pdfFile);
-    
 
     axios
       .post("http://localhost:8000/upload-pdf", formData, {
@@ -208,8 +144,64 @@ const PrescriptionV2 = () => {
         console.error("Error fetching data:", error);
       });
   };
+
   const handleCloseTestModal = () => {
     setIsTestModalOpen(false);
+  };
+
+  const completeAppointment = async () => {
+    console.log("Completing appointment", appointment);
+
+    const response = await axios.put(
+      `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment/`,
+      {
+        id: appointment.id,
+        doctorId: appointment.doctorId,
+        patientId: appointment.patientId,
+        hospitalId: appointment.hospitalId,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
+        type: appointment.type,
+        reason: appointment.reason,
+        notes: notes,
+        symptoms: appointment.symptoms,
+        status: "completed",
+      } as IAppointment
+    );
+
+    if (response.status === 200) {
+      console.log("Appointment completed successfully");
+
+      console.log("Redirecting to doctor profile page", doctor);
+
+      // Redirect to the appointments page
+      navigate("/doctor", {
+        state: doctor,
+      });
+    }
+  };
+
+  const saveNotes = async () => {
+    // Save the notes to the database
+    const response = await axios.put(
+      `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment/`,
+      {
+        id: appointment.id,
+        doctorId: appointment.doctorId,
+        patientId: appointment.patientId,
+        hospitalId: appointment.hospitalId,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
+        type: appointment.type,
+        reason: appointment.reason,
+        notes: notes,
+        symptoms: appointment.symptoms,
+      } as IAppointment
+    );
+
+    if (response.status === 200) {
+      console.log("Notes saved successfully");
+    }
   };
 
   const location = useLocation();
@@ -295,9 +287,21 @@ const PrescriptionV2 = () => {
               handleChange={handleChange}
               history={description}
             />
-            <NotesTab value={activeNotesTab} handleChange={handleChange2} />
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <Button variant="contained">Save</Button>
+            <NotesTab
+              value={activeNotesTab}
+              handleChange={handleChange2}
+              setNotes={setNotes}
+            />
+            <Box
+              sx={{ display: "flex", justifyContent: "center", mt: 2, gap: 2 }}
+            >
+              <Button variant="contained" onClick={() => saveNotes()}>
+                Save
+              </Button>
+
+              <Button variant="contained" onClick={() => completeAppointment()}>
+                Complete
+              </Button>
             </Box>
           </Grid2>
           <Grid2 size={3}>
@@ -319,6 +323,5 @@ const PrescriptionV2 = () => {
     </div>
   );
 };
-
 
 export default PrescriptionV2;

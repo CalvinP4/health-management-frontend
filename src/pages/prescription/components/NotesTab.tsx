@@ -27,6 +27,7 @@ function CustomTabPanel(props: TabPanelProps) {
 const NotesTab = (props: {
   value: number;
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;
+  setNotes: (notes: string) => void;
 }) => {
   return (
     <>
@@ -48,6 +49,10 @@ const NotesTab = (props: {
             multiline
             rows={4}
             sx={{ width: "95%" }}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              props.setNotes(event.target.value);
+            }}
           />
           <IconButton>
             <Mic />

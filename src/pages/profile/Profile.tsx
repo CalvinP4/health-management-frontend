@@ -207,7 +207,8 @@ const Profile = () => {
 
         if (response.status === 200) {
           console.log("Navigating with state:", response.data);
-          navigate("/doctor", { state: response.data as IPatient });
+          //TODO: Update the type to IDoctor
+          navigate("/doctor", { state: response.data as IPatient }); 
         }
       } catch (error) {
         console.error("Failed to update profile:", error);

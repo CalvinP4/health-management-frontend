@@ -9,4 +9,5 @@ export interface IAppointment {
   reason: string;
   notes: string;
   symptoms: string;
+  status: string;
 }

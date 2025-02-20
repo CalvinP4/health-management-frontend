@@ -406,6 +406,7 @@ const BookAppointmentModal = (props: {
   fetchSlots: () => void;
   slots: ISlot[];
   bookAppointment: () => void;
+  setValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>
 }) => {
   return (
     <Modal
@@ -497,7 +498,7 @@ const BookAppointmentModal = (props: {
           <InputLabel>Doctor</InputLabel>
           <Select
             value={props.doctor}
-            onChange={(e) => {
+            onChange={(e) => {              
               props.setDoctor(e.target.value as number);
               props.fetchSlots();
             }}
@@ -529,6 +530,9 @@ const BookAppointmentModal = (props: {
             label="Date"
             value={props.value}
             defaultValue={dayjs("2022-04-17")}
+            onChange={newValue => {
+              props.setValue(newValue);
+            }}
           />
         </LocalizationProvider>
 
@@ -583,13 +587,13 @@ const Patient = () => {
     setActiveTab(newValue);
   };
 
-  const fetchSlots = async () => {
+  const fetchSlots = async () => {    
     try {
       const response = await axios.get(
         `${
           process.env.REACT_APP_BACKEND_SERVER_URL
         }/slot/doctor/${doctor}/date/${value?.format("YYYY-MM-DD") ?? ""}`
-      );
+      );      
 
       setSlots(response.data);
     } catch (error) {
@@ -662,6 +666,8 @@ const Patient = () => {
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/doctor-hospital?hospitalId=${hospitalId}`
       );
 
+      console.log("Doctors", response.data);
+  
       setDoctorsList(response.data as IDoctor[]);
     } catch (error) {
       console.error("Failed to fetch doctors:", error);
@@ -753,6 +759,7 @@ const Patient = () => {
           fetchSlots={fetchSlots}
           slots={slots}
           bookAppointment={bookAppointment}
+          setValue={setValue}
         />
         <AppointmentSection
           patient={patient}

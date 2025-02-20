@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Button,
   Card,
   Container,
   Nav,
@@ -17,6 +16,12 @@ import {
   Card as CardMUI,
   CardContent,
   Avatar,
+  Grid,
+  CardHeader,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IAppointment } from "../../types/Appointments";
@@ -152,7 +157,7 @@ const UpcomingAppointmentsV2 = (props: IUpcomingAppointment) => {
                   </div>
                 </Card.Text>
                 {/**TODO: pass the patient, appointment and doctor details */}
-                <Button
+                {/* <ButtonMUI
                   variant="primary"
                   onClick={() => {
                     navigate("/prescription", {
@@ -161,7 +166,7 @@ const UpcomingAppointmentsV2 = (props: IUpcomingAppointment) => {
                   }}
                 >
                   Start
-                </Button>
+                </ButtonMUI> */}
               </Card.Body>
             </Card>
           );
@@ -175,78 +180,84 @@ const UpcomingAppointments = (props: IUpcomingAppointment) => {
   const navigate = useNavigate();
 
   return (
-    <section
-      style={{ marginTop: "4rem", marginBottom: "4rem", padding: "2rem" }}
-    >
-      <Typography variant="h4">Scheduled Appointments</Typography>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "2em",
-          paddingLeft: "35%",
-          paddingRight: "35%",
-        }}
-      >
+    <Box sx={{ mt: 4, mb: 4, px: { xs: 2, md: 8 } }}>
+      <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold" }}>
+        Scheduled Appointments
+      </Typography>
+      <Grid container spacing={3} justifyContent="center">
         {props.appointments.map((appointment: IAppointment, index: number) => {
           const patient = props.patients.find(
             (p: IPatient) => p.id === appointment.patientId
-          );
+          );          
 
-          return (
-            <CardMUI>
-              <CardContent>
-                <div
-                  style={{ display: "flex", gap: "1em", marginBottom: "4px" }}
-                >
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={require("../../assets/trump.jpg")}
-                  />
-                  <Typography variant="h5">
-                    {patient?.firstName + " " + patient?.lastName}
-                  </Typography>
-                </div>
-                <div style={{ display: "flex", gap: "1em" }}>
-                  <Place />
-                  {appointment.hospitalId}
-                </div>
-                <div style={{ display: "flex", gap: "1em" }}>
-                  <DeviceThermostat />
-                  {appointment.type}
-                </div>
-                <div style={{ display: "flex", gap: "1em" }}>
-                  <Notes />
-                  {appointment.reason}
-                </div>
-                <div style={{ display: "flex", gap: "1em" }}>
-                  <MedicalInformation />
-                  {appointment.symptoms}
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "4px",
-                  }}
-                >
+          return (appointment.status === "Not started" &&
+            <Grid item xs={12} md={6} key={index}>
+              <CardMUI sx={{ boxShadow: 2, borderRadius: 2 }}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      alt={patient?.firstName}
+                      src={require("../../assets/trump.jpg")}
+                    />
+                  }
+                  title={
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      {patient?.firstName + " " + patient?.lastName}
+                    </Typography>
+                  }
+                  subheader={`Appointment ID: ${appointment.id}`}
+                />
+                <CardContent>
+                  <List dense>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Place color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={`Hospital ID: ${appointment.hospitalId}`}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <DeviceThermostat color="primary" />
+                      </ListItemIcon>
+                      <ListItemText primary={`Type: ${appointment.type}`} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Notes color="primary" />
+                      </ListItemIcon>
+                      <ListItemText primary={`Reason: ${appointment.reason}`} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <MedicalInformation color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={`Symptoms: ${appointment.symptoms}`}
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+                <Box sx={{ textAlign: "center", p: 2 }}>
                   <ButtonMUI
                     variant="contained"
-                    onClick={() => {
+                    onClick={() =>
                       navigate("/prescription", {
                         state: { appointment, patient, doctor: props.doctor },
-                      });
-                    }}
+                      })
+                    }
+                    sx={{ textTransform: "none", px: 3 }}
                   >
-                    Start
+                    Start Consultation
                   </ButtonMUI>
-                </div>
-              </CardContent>
-            </CardMUI>
+                </Box>
+              </CardMUI>
+            </Grid>
           );
         })}
-      </div>
-    </section>
+      </Grid>
+    </Box>
   );
 };
 
@@ -293,11 +304,10 @@ const DoctorProfile = (props: { doctor: IDoctor }) => {
 const DoctorComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const doctor = location.state as IDoctor;
 
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [patients, setPatients] = useState<IPatient[]>([]);
-
+  const [doctor, setDoctor] = useState<IDoctor>(location.state as IDoctor);
 
   const navigateToProfile = () => {
     navigate("/profile", {
@@ -317,7 +327,7 @@ const DoctorComponent = () => {
         } as IProfile,
       },
     });
-  }
+  };
 
   const onSelect = (eventKey: any) => {
     console.log("On Select called");
@@ -376,14 +386,14 @@ const DoctorComponent = () => {
     fetchPatients();
   }, []);
 
-  const logout = () => { 
+  const logout = () => {
     navigate("/");
-  }
+  };
 
   return (
     <div style={{ paddingLeft: "10rem", paddingRight: "10rem" }}>
       <HeaderProvider>
-        <HeaderV2 navigateToProfile={navigateToProfile} logout={logout}/>
+        <HeaderV2 navigateToProfile={navigateToProfile} logout={logout} />
         <DoctorProfile doctor={doctor} />
         <UpcomingAppointments
           appointments={appointments}

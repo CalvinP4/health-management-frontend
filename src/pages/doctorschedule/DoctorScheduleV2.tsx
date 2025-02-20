@@ -279,6 +279,8 @@ const DoctorScheduleV2 = () => {
   }, []);
 
   const deleteSlot = async (slot: number) => {
+    console.log("Deleting slot: ", slot);
+
     const response = await axios.delete(
       `${process.env.REACT_APP_BACKEND_SERVER_URL}/slot/${slot}`
     );
@@ -332,6 +334,8 @@ const DoctorScheduleV2 = () => {
 
     if (response.status === 200) {
       const newSlot = response.data;
+      console.log("New slot: ", newSlot);
+      
       setSlots([...slots, newSlot]);
     }
   };

@@ -12,5 +12,4 @@ export interface IDoctor {
     specialization: string;
     licensedYear: Date;
     licensedBy: string;
-    schedule: object;
 }
