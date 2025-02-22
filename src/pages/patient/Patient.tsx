@@ -6,7 +6,6 @@ import patientSvg from "../../assets/patientCare.png";
 import { useLocation } from "react-router-dom";
 import { IPatient } from "../../types/Patients";
 import { Button as ButtonMUI } from "@mui/material";
-import { IHospital } from "../../types/Hospital";
 import { Vaccines } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
 import { ISlot } from "../../types/Slot";

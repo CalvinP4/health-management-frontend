@@ -32,61 +32,10 @@ import { pdfjs } from "react-pdf";
 import pdfFile from "../../assets/mock2.pdf";
 import ReportModal from "./components/ReportModal";
 import FooterV2 from "../../components/FooterV2";
+import { HeaderProvider } from "../../context/HeaderContext";
+import HeaderV2 from "../../components/HeaderV2";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs`;
-
-const Header = (props: {
-  handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void;
-  anchorElUser: HTMLElement | null;
-  handleCloseUserMenu: () => void;
-  navigateToProfile: () => void;
-}) => {
-  return (
-    <AppBar>
-      <Container maxWidth="xl">
-        <Toolbar>
-          <LocalHospital sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography variant="h6" sx={{ mr: 140 }}>
-            MediTech HealthCare
-          </Typography>
-          <Box sx={{ flexGrow: 1 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={props.handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={require("../../assets/trump.jpg")}
-                />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={props.anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(props.anchorElUser)}
-              onClose={props.handleCloseUserMenu}
-            >
-              <MenuItem key="profile" onClick={props.navigateToProfile}>
-                <Typography sx={{ textAlign: "center" }}>Profile</Typography>
-              </MenuItem>
-              <MenuItem key="logout">
-                <Typography sx={{ textAlign: "center" }}>Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
-  );
-};
 
 const PrescriptionV2 = () => {
   const [activeHistoryTab, setActiveHistoryTab] = React.useState(0);
@@ -247,81 +196,98 @@ const PrescriptionV2 = () => {
     });
   };
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-      <div>
-        <Header
-          handleOpenUserMenu={handleOpenUserMenu}
-          handleCloseUserMenu={handleCloseUserMenu}
-          anchorElUser={anchorElUser}
-          navigateToProfile={navigateToProfile}
-        />
-      </div>
-      <Box
-        sx={{
-          width: "30%",
-          backgroundColor: "#e8f5fe",
-          marginTop: 5,
-          marginLeft: 1,
-          padding: 1,
-        }}
-      >
-        <Grid2>
-          <Grid2 size={6}>
-            <Typography variant="h6">Hi, Dr. {doctor.firstName}</Typography>
-            <Typography>Appointment: 1</Typography>
-            <Typography>Location: County general hospital</Typography>
-            <Typography>Date: 22-02-2022</Typography>
-          </Grid2>
-        </Grid2>
-      </Box>
-      <div style={{ height: "80vh", overflowY: "scroll", padding: "2rem" }}>
-        <Grid2 container spacing={2}>
-          <Grid2 size={3}>
-            <PatientDetailsCard patient={patient} />
-            <SymptomsBox symptoms={appointment.symptoms} />
-          </Grid2>
-          <Grid2 size={6}>
-            <PatientHistoryTabs
-              value={activeHistoryTab}
-              handleChange={handleChange}
-              history={description}
-            />
-            <NotesTab
-              value={activeNotesTab}
-              handleChange={handleChange2}
-              setNotes={setNotes}
-            />
-            <Box
-              sx={{ display: "flex", justifyContent: "center", mt: 2, gap: 2 }}
-            >
-              <Button variant="contained" onClick={() => saveNotes()}>
-                Save
-              </Button>
+  const logout = () => {
+    navigate("/");
+  };
 
-              <Button variant="contained" onClick={() => completeAppointment()}>
-                Complete
-              </Button>
-            </Box>
+  return (
+    <div style={styles.page}>
+      <HeaderProvider>
+        <HeaderV2 navigateToProfile={navigateToProfile} logout={logout} />
+        <Box
+          sx={{
+            width: "30%",
+            backgroundColor: "#e8f5fe",
+            marginTop: 5,
+            marginLeft: 1,
+            padding: 1,
+          }}
+        >
+          <Grid2>
+            <Grid2 size={6}>
+              <Typography variant="h6">Hi, Dr. {doctor.firstName}</Typography>
+              <Typography>Appointment: 1</Typography>
+              <Typography>Location: County general hospital</Typography>
+              <Typography>Date: 22-02-2022</Typography>
+            </Grid2>
           </Grid2>
-          <Grid2 size={3}>
-            <ChatGPTCard />
-            <TestHistoryCard openModal={handleOpenTestModal} />
+        </Box>
+        <div style={{ height: "80vh", overflowY: "scroll", padding: "2rem" }}>
+          <Grid2 container spacing={2}>
+            <Grid2 size={3}>
+              <PatientDetailsCard patient={patient} />
+              <SymptomsBox symptoms={appointment.symptoms} />
+            </Grid2>
+            <Grid2 size={6}>
+              <PatientHistoryTabs
+                value={activeHistoryTab}
+                handleChange={handleChange}
+                history={description}
+              />
+              <NotesTab
+                value={activeNotesTab}
+                handleChange={handleChange2}
+                setNotes={setNotes}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: 2,
+                  gap: 2,
+                }}
+              >
+                <Button variant="contained" onClick={() => saveNotes()}>
+                  Save
+                </Button>
+
+                <Button
+                  variant="contained"
+                  onClick={() => completeAppointment()}
+                >
+                  Complete
+                </Button>
+              </Box>
+            </Grid2>
+            <Grid2 size={3}>
+              <ChatGPTCard />
+              <TestHistoryCard openModal={handleOpenTestModal} />
+            </Grid2>
           </Grid2>
-        </Grid2>
-        <ReportModal
-          isTestModalOpen={isTestModalOpen}
-          handleCloseTestModal={handleCloseTestModal}
-          pdfFile={pdfFile}
-          onDocumentLoadSuccess={onDocumentLoadSuccess}
-          bloodReport={bloodReport}
-        />
-      </div>
-      <div>
-        <FooterV2 />
-      </div>
+          <ReportModal
+            isTestModalOpen={isTestModalOpen}
+            handleCloseTestModal={handleCloseTestModal}
+            pdfFile={pdfFile}
+            onDocumentLoadSuccess={onDocumentLoadSuccess}
+            bloodReport={bloodReport}
+          />
+        </div>
+        <div>
+          <FooterV2 />
+        </div>
+      </HeaderProvider>
     </div>
   );
+};
+
+const styles = {
+  page: {
+    paddingLeft: "15rem",
+    paddingRight: "15rem",
+  },
+  buttonSection: {
+    margin: "2em",
+  },
 };
 
 export default PrescriptionV2;
