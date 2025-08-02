@@ -1,9 +1,41 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Grid,
+  Stack,
+  Container,
+  InputAdornment,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
+import {
+  Person,
+  Email,
+  Phone,
+  Home,
+  Lock,
+  CalendarToday,
+  AccountCircle,
+  AppRegistration,
+} from "@mui/icons-material";
 
-const Register = () => {
+/**
+ * Register Component - Professional User Registration
+ * 
+ * A modern registration form with:
+ * - Clean Material-UI design maintaining existing theme
+ * - Organized field layout with icons
+ * - Loading states and error handling
+ * - Responsive design for all screen sizes
+ * - Professional medical theme consistency
+ */
+const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const [registerForm, setRegisterForm] = useState({
@@ -18,21 +50,24 @@ const Register = () => {
     address: "",
   });
 
-  const handleRegisterChange = (e: any) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setError(null); // Clear error when user starts typing
 
     setRegisterForm((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: name === "age" ? parseInt(value) || 0 : value,
     }));
   };
 
-  const handleRegisterSubmit = async (e: any) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic for registering
-    console.log("Register form submitted:", registerForm);
+    setIsLoading(true);
+    setError(null);
 
-    // Make API call
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient`,
@@ -43,178 +78,295 @@ const Register = () => {
         console.log("User registered successfully:", response.data);
         navigate("/login");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
+      setError(
+        error.response?.data?.message || 
+        "Registration failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Form field configuration
+  const formFields = [
+    { 
+      name: "firstName", 
+      label: "First Name", 
+      type: "text", 
+      icon: <Person />, 
+      required: true,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "middleName", 
+      label: "Middle Name", 
+      type: "text", 
+      icon: <Person />, 
+      required: false,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "lastName", 
+      label: "Last Name", 
+      type: "text", 
+      icon: <Person />, 
+      required: true,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "age", 
+      label: "Age", 
+      type: "number", 
+      icon: <AccountCircle />, 
+      required: true,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "dob", 
+      label: "Date of Birth", 
+      type: "date", 
+      icon: <CalendarToday />, 
+      required: true,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "phoneNo", 
+      label: "Phone Number", 
+      type: "tel", 
+      icon: <Phone />, 
+      required: true,
+      gridSize: { xs: 12, sm: 6 }
+    },
+    { 
+      name: "address", 
+      label: "Address", 
+      type: "text", 
+      icon: <Home />, 
+      required: true,
+      gridSize: { xs: 12 }
+    },
+    { 
+      name: "email", 
+      label: "Email Address", 
+      type: "email", 
+      icon: <Email />, 
+      required: true,
+      gridSize: { xs: 12 }
+    },
+    { 
+      name: "password", 
+      label: "Password", 
+      type: "password", 
+      icon: <Lock />, 
+      required: true,
+      gridSize: { xs: 12 }
+    },
+  ];
+
   return (
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
+    <Box
+      sx={{
+        minHeight: "100vh",
         backgroundImage: `url(${process.env.PUBLIC_URL}/home.png)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        paddingTop: "0.5in",
-        minHeight: "calc(100vh - 0.5in)", // Adjusting height to start from 0.5 inch below the top
+        position: "relative",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          zIndex: 0,
+        },
       }}
     >
-      <h2
-        style={{
-          marginBottom: "20px",
-          textAlign: "left",
-          marginLeft: "20px",
-          fontWeight: "bold",
-        }}
-      >
-        {" "}
-        MEDTECH - User Registration System
-      </h2>
-      <div
-        style={{
-          maxWidth: "400px",
-          marginTop: "40px",
-          width: "100%",
-          padding: "20px",
-          borderRadius: "5px",
-          background: "rgba(255,255,255,0.8)",
-          textAlign: "left",
-        }}
-      >
-        <Form onSubmit={handleRegisterSubmit}>
-          <Form.Group>
-            <Form.Label htmlFor="firstName">First Name</Form.Label>
-            <Form.Control
-              type="text"
-              data-testid="firstName"
-              id="firstName"
-              name="firstName"
-              value={registerForm.firstName}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="middleName">Middle Name</Form.Label>
-            <Form.Control
-              type="text"
-              data-testid="middleName"
-              id="middleName"
-              name="middleName"
-              value={registerForm.middleName}
-              onChange={handleRegisterChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="lastName">Last Name</Form.Label>
-            <Form.Control
-              type="text"
-              data-testid="lastName"
-              id="lastName"
-              name="lastName"
-              value={registerForm.lastName}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="dob">DOB</Form.Label>
-            <Form.Control
-              type="date"
-              data-testid="dob"
-              id="dob"
-              name="dob"
-              value={registerForm.dob}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="phoneNo">Phone</Form.Label>
-            <Form.Control
-              type="text"
-              data-testid="phoneNo"
-              id="phoneNo"
-              name="phoneNo"
-              value={registerForm.phoneNo}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="age">Age</Form.Label>
-            <Form.Control
-              type="number"
-              data-testid="age"
-              id="age"
-              name="age"
-              value={registerForm.age}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="address">Address</Form.Label>
-            <Form.Control
-              type="text"
-              data-testid="address"
-              id="address"
-              name="address"
-              value={registerForm.address}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="email">Email</Form.Label>
-            <Form.Control
-              type="email"
-              data-testid="email"
-              id="email"
-              name="email"
-              value={registerForm.email}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="password">Password</Form.Label>
-            <Form.Control
-              type="password"
-              data-testid="password"
-              id="password"
-              name="password"
-              value={registerForm.password}
-              onChange={handleRegisterChange}
-              required
-            />
-          </Form.Group>
-          <Button
-            data-testid="submit-btn"
-            variant="primary"
-            type="submit"
-            style={{ width: "100%", marginTop: "16px" }}
+      <Container maxWidth="md" sx={{ position: "relative", zIndex: 1, py: 4 }}>
+        {/* Header */}
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            mb: 4,
+            background: "linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)",
+            borderRadius: 3,
+            border: "1px solid #ddd",
+          }}
+        >
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <AppRegistration sx={{ fontSize: 32, color: "#666" }} />
+            <Box>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  color: "#333",
+                  mb: 0.5,
+                }}
+              >
+                MEDTECH - User Registration
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#666",
+                  fontWeight: 500,
+                }}
+              >
+                Create your account to access our healthcare services
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+
+        {/* Registration Form */}
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            border: "1px solid #e0e0e0",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          {error && (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mb: 3,
+                borderRadius: 2,
+              }}
+              onClose={() => setError(null)}
+            >
+              {error}
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleRegisterSubmit}>
+            <Grid container spacing={3}>
+              {formFields.map((field) => (
+                <Grid item {...field.gridSize} key={field.name}>
+                  <TextField
+                    fullWidth
+                    name={field.name}
+                    label={field.label}
+                    type={field.type}
+                    value={registerForm[field.name as keyof typeof registerForm]}
+                    onChange={handleRegisterChange}
+                    required={field.required}
+                    disabled={isLoading}
+                    data-testid={field.name}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {React.cloneElement(field.icon, {
+                            sx: { fontSize: 20, color: "#666" },
+                          })}
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        backgroundColor: "#fff",
+                        borderRadius: 2,
+                        "& fieldset": {
+                          borderColor: "#e0e0e0",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#999",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#666",
+                          borderWidth: 2,
+                        },
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#666",
+                        fontWeight: 500,
+                        "&.Mui-focused": {
+                          color: "#666",
+                        },
+                      },
+                      "& .MuiInputBase-input": {
+                        padding: "14px 16px",
+                        fontSize: "1rem",
+                      },
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+
+            {/* Submit Button */}
+            <Box sx={{ mt: 4, textAlign: "center" }}>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={isLoading}
+                data-testid="submit-btn"
+                startIcon={
+                  isLoading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    <AppRegistration />
+                  )
+                }
+                sx={{
+                  backgroundColor: "#666",
+                  color: "white",
+                  fontWeight: 600,
+                  py: 1.5,
+                  px: 6,
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontSize: "1.1rem",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  "&:hover": {
+                    backgroundColor: "#555",
+                    transform: "translateY(-1px)",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "#ccc",
+                    transform: "none",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                {isLoading ? "Creating Account..." : "Register"}
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+
+        {/* Footer */}
+        <Box sx={{ mt: 4, textAlign: "center" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#666",
+              fontWeight: 500,
+              backgroundColor: "rgba(255, 255, 255, 0.8)",
+              py: 1,
+              px: 2,
+              borderRadius: 2,
+              display: "inline-block",
+            }}
           >
-            Register
-          </Button>
-        </Form>
-      </div>
-      <div
-        style={{
-          marginTop: "auto",
-          fontWeight: "bold",
-          marginBottom: "0px",
-          textAlign: "center",
-          fontSize: "12px",
-          color: "#666",
-        }}
-      >
-        Copyright © {new Date().getFullYear()} MedTech. All rights reserved.
-      </div>
-    </div>
+            Copyright © {new Date().getFullYear()} MedTech. All rights reserved.
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
