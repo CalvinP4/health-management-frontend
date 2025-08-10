@@ -31,7 +31,7 @@ import { hospitalMapping } from "../../../types/Hospital";
 // Component props interface
 interface SlotsByDayProps {
   slots: ISlot[];
-  deleteSlot: (slotId: number) => void;
+  deleteSlot: (slotId: string) => void;
 }
 
 /**

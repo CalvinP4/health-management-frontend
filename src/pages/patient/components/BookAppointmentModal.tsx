@@ -23,12 +23,12 @@ const BookAppointmentModal = (props: {
   setOpen: (value: boolean) => void;
   hospitalList: IHospital[];
   doctorsList: IDoctor[];
-  hospital: number;
-  setHospital: (value: number) => void;
-  doctor: number;
-  setDoctor: (value: number) => void;
-  slot: number;
-  setSlot: (value: number) => void;
+  hospital: string;
+  setHospital: (value: string) => void;
+  doctor: string;
+  setDoctor: (value: string) => void;
+  slot: string;
+  setSlot: (value: string) => void;
   type: string;
   setType: (value: string) => void;
   value: Dayjs | null;
@@ -36,7 +36,7 @@ const BookAppointmentModal = (props: {
   setReason: (value: string) => void;
   symptoms: string;
   setSymptoms: (value: string) => void;
-  fetchDoctorsByHospital: (hospitalId: number) => void;
+  fetchDoctorsByHospital: (hospitalId: string) => void;
   fetchSlots: () => void;
   slots: ISlot[];
   bookAppointment: () => void;
@@ -105,13 +105,13 @@ const BookAppointmentModal = (props: {
           <Select
             value={props.hospital}
             onChange={(e) => {
-              props.setHospital(e.target.value as number);
-              props.fetchDoctorsByHospital(e.target.value as number);
+              props.setHospital(e.target.value as string);
+              props.fetchDoctorsByHospital(e.target.value as string);
             }}
             label="Hospital"
           >
             {props.hospitalList.map((h) => (
-              <MenuItem value={h.id}>{h.name}</MenuItem>
+              <MenuItem value={h._id}>{h.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -133,13 +133,13 @@ const BookAppointmentModal = (props: {
           <Select
             value={props.doctor}
             onChange={(e) => {
-              props.setDoctor(e.target.value as number);
+              props.setDoctor(e.target.value as string);
               props.fetchSlots();
             }}
             label="Doctor"
           >
             {props.doctorsList.map((d: IDoctor) => (
-              <MenuItem value={d.id}>{d.firstName + " " + d.lastName}</MenuItem>
+              <MenuItem value={d._id}>{d.firstName + " " + d.lastName}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -147,7 +147,7 @@ const BookAppointmentModal = (props: {
           <InputLabel>Slot</InputLabel>
           <Select
             value={props.slot}
-            onChange={(e) => props.setSlot(e.target.value as number)}
+            onChange={(e) => props.setSlot(e.target.value as string)}
             label="Slot"
           >
             {props.slots

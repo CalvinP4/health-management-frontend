@@ -11,7 +11,7 @@ import FormComponent from "./components/FormComponent";
 import { IPatient } from "../../types/Patients";
 
 const defaultProfile: IProfile = {
-  id: 0,
+  _id: "",
   firstName: "",
   middleName: "",
   lastName: "",
@@ -42,7 +42,7 @@ const Profile = () => {
   const updateUserProfile = async (profile: IProfile, isPatient: boolean) => {
     const endpoint = `${process.env.REACT_APP_BACKEND_SERVER_URL}/${
       isPatient ? "patient" : "doctor"
-    }/${profile.id}`;
+    }/${profile._id}`;
     const payload = {
       phoneNo: profile.phoneNo,
       address: profile.address,

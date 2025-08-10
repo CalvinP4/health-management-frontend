@@ -77,7 +77,7 @@ const useLocationState = (): PrescriptionState => {
   };
 };
 
-const usePatientHistory = (patientId: number) => {
+const usePatientHistory = (patientId: string) => {
   const [history, setHistory] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -163,7 +163,7 @@ const useAppointmentActions = (appointment: IAppointment, navigate: ReturnType<t
       const completedAppointment: IAppointment = {
         ...appointment,
         notes,
-        status: "completed",
+        apptStatus: "completed",
       };
 
       const response = await axios.put(`${BACKEND_URL}/appointment/`, completedAppointment);
@@ -241,7 +241,7 @@ const PrescriptionV2: React.FC = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   // Custom hooks
-  const { history, loading: historyLoading, error: historyError } = usePatientHistory(patient.id);
+  const { history, loading: historyLoading, error: historyError } = usePatientHistory(patient._id);
   const { 
     loadingStates, 
     errors, 
@@ -252,9 +252,9 @@ const PrescriptionV2: React.FC = () => {
 
   // Memoized values
   const profileData = useMemo((): IProfile => ({
-    id: doctor.id,
+    _id: doctor._id,
     firstName: doctor.firstName,
-    middleName: doctor.middleName,
+    middleName: doctor?.middleName || "",
     lastName: doctor.lastName,
     dob: doctor.dob.toString(),
     phoneNo: doctor.phoneNo,

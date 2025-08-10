@@ -23,7 +23,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
       <ul className="list-group">
         {appointments.map((appointment, index) => (
           <li key={index} className="list-group-item">
-            {appointment.doctorId}
+            {appointment.doctor._id}
           </li>
         ))}
       </ul>

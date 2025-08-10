@@ -36,16 +36,16 @@ interface IScheduleModalProps {
     day: string;
     start: string;
     end: string;
-    hospitalId: number;
+    hospitalId: string;
   };
   handleSlotFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  hospitals: { id: number; name: string }[];
+  hospitals: { _id: string; name: string }[];
   addSlot: (
-    doctorId: number,
+    doctorId: string,
     slotDate: string,
     startTime: string,
     endTime: string,
-    hospitalId: number
+    hospitalId: string,
   ) => void;
   setShowSlotModal: (show: boolean) => void;
   doctor: IDoctor;
@@ -110,7 +110,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = (props) => {
     const newErrors = {
       start: !props.slotForm.start,
       end: !props.slotForm.end,
-      hospitalId: props.slotForm.hospitalId === -1,
+      hospitalId: props.slotForm.hospitalId === "",
     };
     setErrors(newErrors);
     
@@ -128,7 +128,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = (props) => {
     try {
       setIsSubmitting(true);
       await props.addSlot(
-        props.doctor.id,
+        props.doctor._id,
         props.value?.format("YYYY-MM-DD") ?? "",
         props.slotForm.start,
         props.slotForm.end,
@@ -323,7 +323,7 @@ const ScheduleModal: React.FC<IScheduleModalProps> = (props) => {
               </Box>
             </MenuItem>
             {props.hospitals.map((hospital) => (
-              <MenuItem key={hospital.id} value={hospital.id}>
+              <MenuItem key={hospital._id} value={hospital._id}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <HospitalIcon sx={{ color: 'primary.main' }} />
                   {hospital.name}

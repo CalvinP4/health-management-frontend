@@ -101,7 +101,7 @@ const DoctorScheduleV2: React.FC = () => {
     day: "",
     start: "",
     end: "",
-    hospitalId: -1,
+    hospitalId: "",
   });
 
   // Memoized doctor's full name for display
@@ -160,7 +160,7 @@ const DoctorScheduleV2: React.FC = () => {
    * Delete a specific time slot
    * Updates local state immediately for better UX
    */
-  const deleteSlot = useCallback(async (slotId: number) => {
+  const deleteSlot = useCallback(async (slotId: string) => {
     try {
       setLoading(prev => ({ ...prev, deletingSlot: true }));
       
@@ -190,7 +190,7 @@ const DoctorScheduleV2: React.FC = () => {
       state: {
         isPatient: false,
         profile: {
-          id: doctor.id,
+          _id: doctor._id,
           firstName: doctor.firstName,
           middleName: doctor.middleName,
           lastName: doctor.lastName,
@@ -210,11 +210,11 @@ const DoctorScheduleV2: React.FC = () => {
    * Handles form submission and updates local state
    */
   const addSlot = useCallback(async (
-    doctorId: number,
+    doctorId: string,
     slotDate: string,
     startTime: string,
     endTime: string,
-    hospitalId: number
+    hospitalId: string
   ) => {
     try {
       setLoading(prev => ({ ...prev, addingSlot: true }));
@@ -239,7 +239,7 @@ const DoctorScheduleV2: React.FC = () => {
           day: "",
           start: "",
           end: "",
-          hospitalId: -1,
+          hospitalId: "",
         });
       }
     } catch (error) {
@@ -267,7 +267,7 @@ const DoctorScheduleV2: React.FC = () => {
       setErrors(prev => ({ ...prev, slots: null }));
       
       const response = await axios.get(
-        `${BACKEND_URL}/slot/doctor/${doctor.id}/date/${newDate.format("YYYY-MM-DD")}`
+        `${BACKEND_URL}/slot/doctor/${doctor._id}/date/${newDate.format("YYYY-MM-DD")}`
       );
       setSlots(response.data);
     } catch (error) {
@@ -280,7 +280,7 @@ const DoctorScheduleV2: React.FC = () => {
     } finally {
       setLoading(prev => ({ ...prev, slots: false }));
     }
-  }, [doctor.id]);
+  }, [doctor._id]);
 
   /**
    * Handle user logout

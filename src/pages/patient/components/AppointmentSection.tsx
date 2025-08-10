@@ -91,23 +91,18 @@ const AppointmentSection = (props: {
               <TableBody>
                 {props.appointments.map((appointment) => {
                   const startTime = new Date(appointment.startTime);
-                  const doctor =
-                    props.doctors.find((d) => d.id === appointment.doctorId) ?? null;
-                  const hospital =
-                    props.hospitals.find((h) => h.id === appointment.hospitalId) ??
-                    null;
 
                   return (
                     <TableRow
-                      key={appointment.id}
+                      key={appointment._id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {doctor?.firstName + " " + doctor?.lastName}
+                        {appointment.doctor?.firstName + " " + appointment.doctor?.lastName}
                       </TableCell>
-                      <TableCell>{hospital?.name}</TableCell>
-                      <TableCell>{startTime.toLocaleDateString()}</TableCell>
-                      <TableCell>{startTime.toLocaleTimeString()}</TableCell>
+                      <TableCell>{appointment.hospital?.name}</TableCell>
+                      <TableCell>{new Date(appointment.startTime).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(appointment.startTime).toLocaleTimeString()}</TableCell>
                       <TableCell>{appointment.type}</TableCell>
                       <TableCell>{appointment.reason}</TableCell>
                     </TableRow>
@@ -141,25 +136,17 @@ const AppointmentSection = (props: {
               </TableHead>
               <TableBody>
                 {props.appointments.map((appointment) => {
-                  const startTime = new Date(appointment.startTime);
-                  const doctor = props.doctors.find(
-                    (doctor) => doctor.id === appointment.doctorId
-                  ) as IDoctor;
-                  const hospital = props.hospitals.find(
-                    (hospital) => hospital.id === appointment.hospitalId
-                  ) as IHospital;
-
                   return (
                     <TableRow
-                      key={appointment.id}
+                      key={appointment._id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {doctor?.firstName + " " + doctor?.lastName}
+                        {appointment.doctor?.firstName + " " + appointment.doctor?.lastName}
                       </TableCell>
-                      <TableCell>{hospital?.name}</TableCell>
-                      <TableCell>{startTime.toLocaleDateString()}</TableCell>
-                      <TableCell>{startTime.toLocaleTimeString()}</TableCell>
+                      <TableCell>{appointment.hospital?.name}</TableCell>
+                      <TableCell>{new Date(appointment.startTime).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(appointment.startTime).toLocaleTimeString()}</TableCell>
                       <TableCell>{appointment.type}</TableCell>
                     </TableRow>
                   );

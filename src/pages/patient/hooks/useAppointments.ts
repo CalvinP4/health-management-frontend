@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { IAppointment } from "../../../types/Appointments";
 
-export const useAppointments = (patientId: number) => {
+export const useAppointments = (patientId: string) => {
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export const useAppointments = (patientId: number) => {
     const fetchAppointments = async () => {
         try {
           const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment?patientId=${patientId}`
+            `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment/patient/${patientId}`
           );
   
           setAppointments(response.data);

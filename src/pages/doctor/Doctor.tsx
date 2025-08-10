@@ -22,7 +22,7 @@ const DoctorComponent = () => {
   const [doctor, setDoctor] = useState<IDoctor | null>(
     (location.state as IDoctor) || null
   );
-  const appointments = useAppointments(doctor?.id || 0);
+  const appointments = useAppointments(doctor?._id || "");
 
   useEffect(() => {
     if (!doctor) {
@@ -36,7 +36,7 @@ const DoctorComponent = () => {
       state: {
         isPatient: false,
         profile: {
-          id: doctor?.id,
+          _id: doctor?._id,
           firstName: doctor?.firstName,
           middleName: doctor?.middleName,
           lastName: doctor?.lastName,
@@ -51,20 +51,6 @@ const DoctorComponent = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient`
-        );
-        setPatients(response.data);
-      } catch (error) {
-        console.error("Failed to fetch patients:", error);
-      }
-    };
-
-    fetchPatients();
-  }, [doctor]);
 
   const logout = () => {
     navigate("/");
@@ -77,8 +63,6 @@ const DoctorComponent = () => {
         <DoctorProfile doctor={doctor} />
         <UpcomingAppointments
           appointments={appointments}
-          patients={patients}
-          doctor={doctor}
         />
         <FooterV2 />
       </HeaderProvider>

@@ -28,12 +28,12 @@ const Patient = () => {
   const navigate = useNavigate();
 
   const [doctorsList, setDoctorsList] = useState<IDoctor[]>([]);
-  const appointments = useAppointments(patient.id);
+  const appointments = useAppointments(patient._id);
   const doctors = useDoctors();
   const hospitals = useHospitals();
-  const [hospital, setHospital] = useState<number>(0);
-  const [doctor, setDoctor] = useState<number>(0);
-  const [slot, setSlot] = useState<number>(-1);
+  const [hospital, setHospital] = useState<string>("");
+  const [doctor, setDoctor] = useState<string>("");
+  const [slot, setSlot] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [value, setValue] = React.useState<Dayjs | null>(dayjs());
   const [open, setOpen] = React.useState(false);
@@ -65,7 +65,7 @@ const Patient = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/appointment`,
         {
-          patientId: patient.id,
+          patientId: patient._id,
           doctorId: doctor,
           hospitalId: hospital,
           startTime: `${value?.format("YYYY-MM-DD")}T${
@@ -102,12 +102,12 @@ const Patient = () => {
   };
 
   useEffect(() => {
-    if (doctor !== 0) {
+    if (!doctor) {
       fetchSlots();
     }
   }, [doctor, value]);
 
-  const fetchDoctorsByHospital = async (hospitalId: number) => {
+  const fetchDoctorsByHospital = async (hospitalId: string) => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/doctor-hospital?hospitalId=${hospitalId}`
@@ -126,7 +126,7 @@ const Patient = () => {
       state: {
         isPatient: true,
         profile: {
-          id: patient.id,
+          _id: patient._id,
           firstName: patient.firstName,
           middleName: patient.middleName,
           lastName: patient.lastName,

@@ -1,10 +1,10 @@
 export interface ISlot {
-    id: number;
+    id: string;
     startTime: string;
     endTime: string;
     slotDate: Date;
-    doctorId: number;
-    hospitalId: number;
+    doctorId: string;
+    hospitalId: string;
     apptStatus: number;
 }
 

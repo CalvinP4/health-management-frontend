@@ -28,6 +28,8 @@ import {
   PersonAdd,
   MedicalServices,
 } from "@mui/icons-material";
+import { IPatient } from "../../types/Patients";
+import { IDoctor } from "../../types/Doctors";
 
 /**
  * Home Component - Professional Login Portal
@@ -81,26 +83,24 @@ const Home: React.FC = () => {
       let found = false;
       
       if (userType.toLowerCase() === "patient") {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient`
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/patient/login`,
+          loginForm
         );
         
-        const patient = response.data.find((p: any) => 
-          p.email === loginForm.email && p.password === loginForm.password
-        );
+        const patient = response.data as IPatient;
         
         if (patient) {
           navigate("/patient", { state: patient });
           found = true;
         }
       } else if (userType.toLowerCase() === "doctor") {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor`
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/doctor/login`,
+          loginForm
         );
 
-        const doctor = response.data.find((d: any) => 
-          d.email === loginForm.email && d.password === loginForm.password
-        );
+        const doctor = response.data as IDoctor;
         
         if (doctor) {
           navigate("/doctor", { state: doctor });

@@ -34,8 +34,6 @@ import {
 // Define the interface for component props
 interface IUpcomingAppointment {
   appointments: IAppointment[];
-  patients: IPatient[];
-  doctor: IDoctor | null;
 }
 
 /**
@@ -49,15 +47,13 @@ interface IUpcomingAppointment {
  * - Enhanced card design maintaining existing theme
  */
 const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({ 
-  appointments, 
-  patients, 
-  doctor 
+  appointments
 }) => {
   const navigate = useNavigate();
 
   // Filter for upcoming appointments only
   const upcomingAppointments = appointments.filter(
-    (appointment: IAppointment) => appointment.status === "Not started"
+    (appointment: IAppointment) => appointment.apptStatus === null
   );
 
   // Get patient initials for avatar fallback
@@ -139,12 +135,9 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
       ) : (
         <Grid container spacing={3}>
           {upcomingAppointments.map((appointment: IAppointment, index: number) => {
-            const patient = patients.find(
-              (p: IPatient) => p.id === appointment.patientId
-            );
 
             return (
-              <Grid item xs={12} lg={6} key={appointment.id || index}>
+              <Grid item xs={12} lg={6} key={appointment._id || index}>
                 <Card 
                   sx={{ 
                     height: '100%',
@@ -175,7 +168,7 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
                           boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                         }}
                       >
-                        {patient ? getPatientInitials(patient) : <Person />}
+                        {appointment?.patient ? getPatientInitials(appointment?.patient) : <Person />}
                       </Avatar>
                     }
                     title={
@@ -187,8 +180,8 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
                           mb: 0.5,
                         }}
                       >
-                        {patient 
-                          ? `${patient.firstName} ${patient.lastName}`
+                        {appointment?.patient
+                          ? `${appointment?.patient.firstName} ${appointment?.patient.lastName}`
                           : "Unknown Patient"
                         }
                       </Typography>
@@ -196,7 +189,7 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
                     subheader={
                       <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                         <Chip
-                          label={`ID: ${appointment.id}`}
+                          label={`ID: ${appointment._id}`}
                           size="small"
                           sx={{
                             backgroundColor: '#f0f0f0',
@@ -234,7 +227,7 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
                         <ListItemText
                           primary={
                             <Typography variant="body2" sx={{ fontWeight: 500, color: '#333' }}>
-                              Hospital ID: {appointment.hospitalId}
+                              Hospital: {appointment?.hospital?.name}
                             </Typography>
                           }
                         />
@@ -308,7 +301,7 @@ const UpcomingAppointments: React.FC<IUpcomingAppointment> = ({
                       fullWidth
                       onClick={() =>
                         navigate("/prescription", {
-                          state: { appointment, patient, doctor },
+                          state: { appointment, patient: appointment?.patient, doctor: appointment?.doctor },
                         })
                       }
                       startIcon={<DeviceThermostat />}
